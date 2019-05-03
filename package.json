@@ -1,0 +1,26 @@
+{
+  "name": "kmag2",
+  "version": "0.1.0",
+  "description": "Intranet Mag KK",
+  "main": "index.js",
+  "scripts": {
+    "startDevW_S": "watch-and-rsync -o=start -c=./devWatchSync.js",
+    "stopDevW_S": "watch-and-rsync -o=stop -c=./devWatchSync.js",
+    "listWS": "watch-and-rsync -o=list"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucaciotti/kMag.git"
+  },
+  "author": "Luca Ciotti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucaciotti/kMag/issues"
+  },
+  "homepage": "https://github.com/lucaciotti/kMag#readme",
+  "dependencies": {
+    "jquery": "^3.4.1",
+    "rsync": "^0.6.1",
+    "watch-and-rsync": "^1.0.2"
+  }
+}

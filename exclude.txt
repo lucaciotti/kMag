@@ -2,3 +2,5 @@
 .wip/
 .rSync/
 .esp/
+text
+test3
