@@ -1,0 +1,4 @@
+.assets/
+.wip/
+.rSync/
+.esp/

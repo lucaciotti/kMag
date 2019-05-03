@@ -1,0 +1,61 @@
+<?php 
+/************************************************************************/
+/* Project ArcaWeb                               		      			*/
+/* ===========================                                          */
+/*                                                                      */
+/* Copyright (c) 2003-2013 by Roberto Ceccarelli                        */
+/*                                                                      */
+/************************************************************************/
+
+include("header.php");
+?>
+<script type="text/javascript">
+//<![CDATA[
+var createCookie = function(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+};
+
+var setPrinter = function() {
+	createCookie("plprinter", document.getElementById("prt").value, 10);
+	return true;
+};
+//]]>
+</script>
+<?php
+$id = $_GET['id'];
+$collo = ( isset($_GET['collo']) ? $_GET['collo'] : 0 );
+$artCollo = ( isset($_GET['artcollo']) ? $_GET['artcollo'] : "" );
+$desCollo = ( isset($_GET['descollo']) ? $_GET['descollo'] : "" );
+$nColli = ( isset($_GET['ncolli']) ? $_GET['ncolli'] : 1 );
+$default_prt = ( isset($_COOKIE['plprinter']) ? $_COOKIE['plprinter'] : "##" );
+$split = (isset($_GET['split']) ? $_GET['split'] : 0);
+
+head("Scelta stampante");
+
+print("<form method=\"get\" action=\"pl-print.php\" onsubmit=\"return setPrinter();\">\n");
+hiddenField("id", $id);  
+hiddenField("collo", $collo);
+hiddenField("artcollo", $artCollo);
+hiddenField("descollo", $desCollo);
+hiddenField("split", $split);
+hiddenField("ncolli", $ncolli);
+print("<select name=\"prt\" id=\"prt\">\n");
+for($i = 0; $i < count($prtlist); $i++) {
+	print("<option value=\"" . $prtlist[$i] . "\"");
+	print( $prtlist[$i] == $default_prt ? " selected=\"selected\">" : ">" );
+	print($prtlist[$i]);
+	print("</option>\n");
+} 
+
+print("</select>\n<br>\n");
+print("<input type=\"submit\" value=\"Stampa\">\n");
+print("</form>");
+
+footer();
+?>

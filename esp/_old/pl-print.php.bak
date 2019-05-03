@@ -1,0 +1,57 @@
+<?php 
+/************************************************************************/
+/* Project ArcaWeb                               		      			*/
+/* ===========================                                          */
+/*                                                                      */
+/* Copyright (c) 2003-2013 by Roberto Ceccarelli                        */
+/*                                                                      */
+/************************************************************************/
+
+include("header.php");
+
+$id = $_GET['id'];
+$collo = ( isset($_GET['collo']) ? $_GET['collo'] : 0 );
+$artCollo = ( isset($_GET['artcollo']) ? $_GET['artcollo'] : "" );
+$desCollo = ( isset($_GET['descollo']) ? $_GET['descollo'] : "" );
+$prt = ( isset($_GET['prt']) ? $_GET['prt'] : "2" );
+$split = $_GET['split'];
+$ncolli = $_GET['ncolli'];
+
+//$conn = new COM("ADODB.Connection");
+//$conn->Open($connectionstring);
+$dbPrint = getODBCSocket();
+
+if( $split >0) {
+	for($j=0; $j < $split; $j++) {
+		$Query = "insert into u_etichpl (id_doc, collo, printer, artcollo, descollo, extracollo) values ($id, ($collo + $j), '".$prt."', '', '', 0)";
+		if (!$dbPrint->Execute($Query)) print "<p> 01 - C'é un errore: " . $dbPrint->errorMsg() . "<p>" and die();
+	}
+} else {
+
+	if(trim($artCollo)==""){
+		$Query = "insert into u_etichpl (id_doc, collo, printer, artcollo, descollo, extracollo) values ($id, $collo, '".$prt."', '', '', 0)";
+	}
+//	else{
+//		$Query = "insert into u_etichpl (id_doc, collo, printer, artcollo, descollo, extracollo) values ($id, $collo, \"$prt\", \"\", \"\", 1)";
+//	}
+	if (!$dbPrint->Execute($Query)) print "<p> 01 - C'é un errore: " . $dbPrint->errorMsg() . "<p>" and die();
+
+	//se il collo ha anche il collo supplementare allora faccio due sparate nella tabella
+	//una con il codice originario e l'altra con il codice dell'articolo del collo
+	if(trim($artCollo) != "")
+	{
+		$collosup = $collo + 1;
+//		$Query = "insert into u_etichpl (id_doc, collo, printer, artcollo, descollo, extracollo) values ($id, $collosup, \"$prt\", \"$artCollo\", \"$desCollo\", 0)";
+// ROBERTO 11.09.2013 - la descrizione deve essere sempre la stessa!
+		$Query = "insert into u_etichpl (id_doc, collo, printer, artcollo, descollo, extracollo) values ($id, $collosup, '".$prt."', '', '', 0)";
+		if (!$dbPrint->Execute($Query)) print "<p> 01 - C'é un errore: " . $dbPrint->errorMsg() . "<p>" and die();
+	}
+}
+//diconnect from database 
+//$conn->Close();
+//$rs = null;
+//$conn = null;
+
+header("location: askpl.php"); 
+
+?>
