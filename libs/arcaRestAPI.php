@@ -15,7 +15,7 @@ class arcaRestAPI {
         if($queryUrl){
             $url = $url.'?'.$queryUrl;
         }
-	//print($url);
+	    // print($url);
         $get_data = $this->callAPI('GET', $url, false);
         return $this->buildResult($get_data);        
     }
@@ -32,6 +32,20 @@ class arcaRestAPI {
         $url = $this->global_url.$subUrl;
         $make_call = $this->callAPI('POST', $url, $data_array);
         return $this->buildResult($make_call, 'POST');
+    }
+
+    public function put($subUrl, $data_array){
+        // $data_array =  array(
+        //     "customer"        => $user['User']['customer_id'],
+        //     "payment"         => array(
+        //             "number"         => $this->request->data['account'],
+        //             "routing"        => $this->request->data['routing'],
+        //             "method"         => $this->request->data['method']
+        //     ),
+        // );
+        $url = $this->global_url.$subUrl;
+        $make_call = $this->callAPI('PUT', $url, $data_array);
+        return $this->buildResult($make_call, 'PUT');
     }
 
 

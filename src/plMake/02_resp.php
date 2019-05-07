@@ -56,7 +56,10 @@
             $chiudicollo = "checked='checked'";
         }
         if($qtaRes > 0){
-            $collo = PLUtils::getCollo($id_pl, $termid);
+            $collo = PLUtils::getColloByTermId($id_pl, $termid);
+            if($collo==-1){
+                $collo = PLUtils::getNewCollo($id_pl);
+            }
         } else {
             $isDisabled = " readonly='readonly'";
             $btn_disabled = " disabled='disabled'";
@@ -77,7 +80,7 @@
     &nbsp; per <?php print $ragsociale;?> [<?php print $codicecf; ?>]
 </div>
 
-<form name="plrow" id="plrow" method="post" action="03_write.php" onsubmit="checkForm('idtesta', 'collo', 'close', 'nColli');">
+<form name="plrow" id="plrow" method="post" action="03_write.php" onsubmit="return checkRespForm();">
     <table border="1">
         <tr>
             <th>Art.</th>
@@ -105,7 +108,7 @@
         <tr>
             <th>Qt&agrave Sparata</th>
             <td>
-                <input type="text" name="qta" id="qta" size="6" value=<?php print $qtaRes; ?> $disabled onblur="checkQta(this);">
+                <input type="text" name="qta" id="qta" size="6" value=<?php print $qtaRes; ?> $disabled onchange="checkQta(this);">
                 <select name="um" id="um">
                     <option <?php ($umP == $umDoc ? print("selected='selected'") : "") ?> value='1'><?php print $umP; ?></option>
                     <?php if($um1 != "  " && $um1 != $umP) { ?>
@@ -123,9 +126,9 @@
         <tr>
             <th>Collo N.</th>
             <td>
-                <input type="text" size="4" name="collo" id="collo" value='<?php print $collo; ?>' onkeyup="soloNumeri('collo')" onblur="checkCollo('idtesta', this.value, '', <?php print $nColli; ?>);" $isDisabled>
+                <input type="text" size="4" name="collo" id="collo" value='<?php print $collo; ?>' onkeyup="soloNumeri('collo')" onblur="checkCollo(this);" $isDisabled>
                 &nbsp
-                <input type="checkbox" name="close" id="close" value="0" $isDisabled $chiudicollo>
+                <input type="checkbox" name="close" id="close" value="1" $isDisabled $chiudicollo>
                 <label for="close">Chiudi collo</label>
                 <?php if($isDisabled == "") { ?>
                     <input type="checkbox" name="print" id="print" value="1">
@@ -189,6 +192,7 @@
     var esercizio = <?php print(current_year()); ?>;
     var termid = <?php print $termid; ?>;
     var detailLotto = {};
+    var colloReserved = false; //salvo se è già stato riservato non eseguo nuovamente prenotazione.
     $(document).ready(function () {
         // listaLotti = $.parseJSON(decodeURIComponent($("#listaLotti").val()));
         codArt = $("#codArt").text().trim();

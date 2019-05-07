@@ -1,10 +1,9 @@
 <?php
     include_once($_SERVER['DOCUMENT_ROOT']."/kMag2/models/PLUtils.php");
     $id = $_GET['id'];
-    $termid = $_GET['termid'];
-    $collo = $_GET['collo'];
+    // $termid = $_GET['termid'];
     $errMessage = "";
     $ret = '';
 
-    $result = PLUtils::insCollo($id, $termid, $collo);
+    $result = PLUtils::getNewCollo($id);
     print $result;
