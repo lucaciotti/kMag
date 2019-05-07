@@ -4,9 +4,8 @@
   "description": "Intranet Mag KK",
   "main": "index.js",
   "scripts": {
-    "startDevW_S": "watch-and-rsync -o=start -c=./devWatchSync.js",
-    "stopDevW_S": "watch-and-rsync -o=stop -c=./devWatchSync.js",
-    "listWS": "watch-and-rsync -o=list"
+    "devSync": "node _dev-tools/devRsync.js",
+    "watchDev": "node _dev-tools/watchProjectDev.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +20,6 @@
   "dependencies": {
     "jquery": "^3.4.1",
     "rsync": "^0.6.1",
-    "watch-and-rsync": "^1.0.2"
+    "watch": "^1.0.2"
   }
 }

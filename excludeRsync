@@ -1,0 +1,9 @@
+.git/
+_dev-tools/
+assets/images/
+assets/other/
+wip/
+rSync/
+esp/
+node_modules/
+.gitignore

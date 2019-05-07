@@ -1,14 +1,10 @@
 <?php
-    include($_SERVER['DOCUMENT_ROOT']."/kMag2/models/Article.php");
-    $codeArt = strtoupper($_GET['cod']);
-    $codeLot = strtoupper($_GET['lotto']);
-    if(empty($codeLot)){
-        $codeLot = null;
-    }
+    include($_SERVER['DOCUMENT_ROOT']."/kMag2/models/Anagrafe.php");
+    $code = strtoupper($_GET['cod']);
     $errMessage = "";
     $ret = '';
 
-    $result = Article::getGiacLot($codeArt, $codeLot, true);
+    $result = Anagrafe::getSetInd($code);
     
     if(empty($result['error']) && !empty($result['data'])) {
         header('Content-Type: application/json');
@@ -27,4 +23,3 @@
             var_dump($result);
         }
     }
-    

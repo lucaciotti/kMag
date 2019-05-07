@@ -21,5 +21,15 @@ class Anagrafe {
 
         return self::$conn->get($url, $queryUrl);
     }
+
+    public static function getSetInd($codSettore, $columns=null){
+        self::initialize();
+
+        $url = '/anagraf/getSetInd/'.$codSettore;
+        $queryUrl = '';
+        if($columns) $queryUrl = 'col='.$columns;
+
+        return self::$conn->get($url, $queryUrl);
+    }
     
 }

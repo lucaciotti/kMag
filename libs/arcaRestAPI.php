@@ -30,8 +30,8 @@ class arcaRestAPI {
         //     ),
         // );
         $url = $this->global_url.$subUrl;
-        $make_call = callAPI('POST', $url, json_encode($data_array));
-        return $this->buildResult($make_call);
+        $make_call = $this->callAPI('POST', $url, $data_array);
+        return $this->buildResult($make_call, 'POST');
     }
 
 
@@ -39,7 +39,8 @@ class arcaRestAPI {
     // ---------------------------------
     private function callAPI($method, $url, $data = false){
         $curl = curl_init();
-	$url = str_replace(' ', '%20', $url);
+        $url = str_replace(' ', '%20', $url);
+        $header = $this->dataToHeader($data);
 
         switch ($method)
         {
@@ -47,7 +48,7 @@ class arcaRestAPI {
                 curl_setopt($curl, CURLOPT_POST, 1);
 
                 if ($data)
-                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
                 break;
             case "PUT":
                 curl_setopt($curl, CURLOPT_PUT, 1);
@@ -62,6 +63,7 @@ class arcaRestAPI {
         curl_setopt($curl, CURLOPT_USERPWD, "username:password");
 
         curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
         $result = curl_exec($curl);
@@ -71,12 +73,30 @@ class arcaRestAPI {
         return $result;
     }
 
-    private function buildResult($response){
+    private function dataToHeader($data=null){
+        $header = array();
+        array_push($header, "cache-control: no-cache");
+
+        if($data){
+            foreach($data as $key => $value)
+            {
+                array_push($header, $key.": ".$value);
+            }
+        }
+
+        return $header;
+    }
+
+    private function buildResult($response, $method=null){
         $data = json_decode($response, true);
         $result = array(
+            'rows' => count($data['success']),
             'data' => $data['success'],
             "error" => $data['errMessage']
         );
+        if($method && empty($result['error'])){
+            $result = 'success';
+        }
         return $result;
     }
 }

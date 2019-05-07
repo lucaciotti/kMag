@@ -32,4 +32,18 @@ class PLUtils {
         }
     }
 
+    public static function insCollo($idtesta, $termid, $collo){
+        self::initialize();
+
+        $data = array(
+            "id"        => $idtesta,
+            "nCollo"    => $collo,
+            "termid"    => $termid
+        );
+        // var_dump($data);
+        $url = 'plUtils/insertCollo';
+        $res = self::$conn->post($url, $data);
+        var_dump($res);
+    }
+
 }

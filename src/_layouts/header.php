@@ -54,5 +54,6 @@ function checkPermission(){
     <script type="text/javascript" src="../../assets/js/arcaJS/pickingLib.js"></script>
     <script type="text/javascript" src="../../assets/js/arcaJS/plLib.js"></script>
     <script type="text/javascript" src="../../assets/js/arcaJS/printLib.js"></script>
+    <script type="text/javascript" src="../../assets/js/arcaJS/anagrafLib.js"></script>
 </head>
 <body>

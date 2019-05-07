@@ -44,6 +44,8 @@
             $fatt2 = $artGet['data'][0]['fatt2'];
             $fatt3 = $artGet['data'][0]['fatt3'];
             $lottoOb = $artGet['data'][0]['lotti'];
+            $cliSoloCe = $cliGet['data'][0]['u_soloce'];
+            $cliSettore = $cliGet['data'][0]['settore'];
         }
         
         //VERIFICHE VARIE
@@ -92,7 +94,7 @@
         <tr>
             <th>Cod. Lotto</th>
             <td>
-                <input type="text" name='lotto' id="lotto" value='<?php print $lotto; ?>' $isDisabled onblur="checkLotto('codeArt', this)">
+                <input type="text" name='lotto' id="lotto" value='<?php print $lotto; ?>' $isDisabled onblur="checkLotto(this)">
                 <span id="lottoobb"><?php ($lottoOb ? print "Obbligatorio" : ""); ?></span>
             </td>
         </tr>
@@ -103,7 +105,7 @@
         <tr>
             <th>Qt&agrave Sparata</th>
             <td>
-                <input type="text" name="qta" id="qta" size="6" value=<?php print $qtaRes; ?> $disabled onchange="checkQta('codeArt', this);">
+                <input type="text" name="qta" id="qta" size="6" value=<?php print $qtaRes; ?> $disabled onblur="checkQta(this);">
                 <select name="um" id="um">
                     <option <?php ($umP == $umDoc ? print("selected='selected'") : "") ?> value='1'><?php print $umP; ?></option>
                     <?php if($um1 != "  " && $um1 != $umP) { ?>
@@ -123,7 +125,7 @@
             <td>
                 <input type="text" size="4" name="collo" id="collo" value='<?php print $collo; ?>' onkeyup="soloNumeri('collo')" onblur="checkCollo('idtesta', this.value, '', <?php print $nColli; ?>);" $isDisabled>
                 &nbsp
-                <input type="checkbox" name="close" id="close" value="1" $isDisabled $chiudicollo>
+                <input type="checkbox" name="close" id="close" value="0" $isDisabled $chiudicollo>
                 <label for="close">Chiudi collo</label>
                 <?php if($isDisabled == "") { ?>
                     <input type="checkbox" name="print" id="print" value="1">
@@ -138,7 +140,7 @@
     <input type="hidden" name="id" id="id" value="<?php print $id; ?>">
     <input type="hidden" name="idtesta" id="idtesta" value="<?php print $id_pl; ?>">
     <input type="hidden" name="umDoc" id="umDoc" value="<?php print $umDoc; ?>">
-    <input type="hidden" name="fattDoc" id="umDoc" value="<?php print $fattDoc; ?>">
+    <input type="hidden" name="fattDoc" id="fattDoc" value="<?php print $fattDoc; ?>">
     <input type="hidden" name="qtaRes" id="qtaRes" value="<?php print $qtaRes; ?>">
     <input type="hidden" name="oldFatt" id="oldFatt" value="0">
     <input type="hidden" name="newFatt" id="newFatt" value="0">
@@ -146,6 +148,8 @@
     <input type="hidden" name="ncolli" id="ncolli" value="<?php print $nColli; ?>">
     <input type="hidden" name="artcollo" id="artcollo" value="<?php print $artCollo; ?>">
     <input type="hidden" name="descollo" id="descollo" value="<?php print $desCollo; ?>">
+    <input type="hidden" name="soloCeCli" id="soloCeCli" value="<?php print ($cliSoloCe ? 'true' : 'false'); ?>">
+    <input type="hidden" name="settoreCli" id="settoreCli" value="<?php print $cliSettore; ?>">
 
     <input style="float: right" type="submit" name="btnok" id="btnok" value="Procedi" $isDisabled>
 </form>
@@ -180,10 +184,16 @@
 
 <script type='text/javascript'>
     var codArt = "";
+    var soloceCli = false;
+    var settoreCli = "";
+    var esercizio = <?php print(current_year()); ?>;
+    var termid = <?php print $termid; ?>;
     var detailLotto = {};
     $(document).ready(function () {
         // listaLotti = $.parseJSON(decodeURIComponent($("#listaLotti").val()));
         codArt = $("#codArt").text().trim();
+        soloceCli = $("#soloCeCli").val()=='false' ? false : true;
+        settoreCli = $("#settoreCli").val();
     });
 </script>
 

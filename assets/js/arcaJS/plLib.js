@@ -1,4 +1,3 @@
-
 function decodeArt(obj) {
     var val = obj.value;
     var codArtBox = htmlEntities(String($('#codArt').text())).trim();
@@ -14,26 +13,21 @@ function decodeArt(obj) {
         obj.disabled = true;
         var newUm = oArt.xml.getElementsByTagName("unmisura")[0].firstChild.nodeValue;
         //Mappo i Box di riferimento
-        var umBox = $('um');
-        var qtaBox = $('qta');
+        var umBox = document.getElementById('um');
+        var qtaBox = $('#qta');
         //imposto Fattore di conversione precedente
-        var oldFatt = umBox.children("option:selected").val();
-        $('oldFatt').val(oldFatt);
+        var oldFatt = umBox.options[umBox.selectedIndex].value;
+        $('#oldFatt').val(oldFatt);
 
-        umBox.attr('options').each( function(){
-            if($(this).text()==newUM) {
-                
-            }
-        });
-        
         for (var j = 0; j < umBox.length; j++) {
             if (umBox.options[j].innerHTML == newUm) {
                 umBox.selectedIndex = j;
-                qtaBox.value = qtaBox.value * oldFatt / umBox.options[j].value;
-                document.getElementById("newFatt").value = umBox.options[j].value;
+                qtaBox.val(qtaBox.val() * oldFatt / umBox.options[j].value);
+                $("#newFatt").val(umBox.options[j].value);
                 umBox.disabled = true;
             }
         }
+
         //Controllo il lotto obbligatorio
         if (oArt.xml.getElementsByTagName("lottoob")[0].firstChild.nodeValue == 0) {
             document.getElementById('lotto').disabled = false;
@@ -45,44 +39,90 @@ function decodeArt(obj) {
     }
 }
 
-function checkLotto (cCodice, obj) {
-    var lotto = cleanCode(obj.value.trim());
+function checkLotto (obj) {
+    var lotto = cleanCode(obj.value.trim().toUpperCase());
+    obj.value = lotto;
+    if(lotto=='') return true;
     detailLotto = $.parseJSON(getLottiArti(codArt, lotto));
-    console.log(listaLotti);
-
-    /* if (lotto=='') {
-        return true;
+    if(detailLotto == '*error*') {
+        alert('Lotto ' + lotto + ' Not available');
+        obj.value = '';
+        obj.focus();
+        return false;
     }
-    var lista = checkCodiceArtix(cCodice).xml.getElementsByTagName("lotto");
-    for (var j = 0; j < lista.length; j++) {
-        if (lista[j].firstChild.nodeValue == lotto) {
-            obj.value = lotto;
+    // console.log(detailLotto[0].u_noce);
+    if (soloceCli && detailLotto[0].u_noce) {
+        alert("Lotto " + lotto + " non di origine CEE. Non utilizzabile per questo cliente.");
+        obj.value = "";
+        obj.focus();
+        return false;
+    } else {
+        var isIndustria = $.parseJSON(getSetInd(settoreCli))!='*error*' ? true : false;
+        if (isIndustria && detailLotto[0].u_noindus) {
+            alert("Lotto " + lotto + " non per industria. Non utilizzabile per questo cliente.");
+            obj.value = "";
+            obj.focus();
+            return false;
+        } else{
             document.getElementById('qta').focus();
             return true;
         }
     }
-    alert("Lotto: " + lotto + " non valido per questo articolo.");
-    obj.value = "";
-    obj.focus();
-    return false; */
 };
 
-function checkCollo(id, collo, close, ncolli) {
-    "use strict";
-
-    //    alert("ID:" + id + " COLLO:" + collo + " CLOSE:" + close + " NCOLLI:" + ncolli);
-    soloNumeri("collo");
-    if (collo == 0) {
-        alert("Numero collo non specificato!");
+function checkQta (obj) {
+    var qta = obj.value;
+    var qtaRes = $('#qtaRes').val();
+    var oldFatt = $('#fattDoc').val();
+    var umBox = document.getElementById('um');
+    var newFatt = umBox.options[umBox.selectedIndex].value;
+    $('#newFatt').val(newFatt);
+    qtaRes = qtaRes * oldFatt / newFatt;
+    var lotto = $("#lotto").val().trim();
+    if ($('#lottoobb').text().trim() == 'Obbligatorio' && lotto==''){
+        alert('Lotto OBBLIGATORIO');
+         $("#lotto").val('');
+         $("#lotto").focus();
         return false;
     }
-    var url = "getcollofree.php?id=" + id + "&collo=" + collo;
-    if (close === true) {
-        url += "&close";
+    if (qta != 0) {
+        var giac = checkGiacArtix(codArt, lotto, esercizio);
+        var fatt = newFatt;
+        var um = umBox.options[umBox.selectedIndex].innerHTML;
+        giac = giac / fatt;
+        if (qta > qtaRes) {
+            alert("Qta Superiore a Qta Residua");
+            return false;
+        } else {
+            if (qta > giac) {
+                if (lotto != "") {
+                    var message = "Qta Superiore a GIACENZA LOTTO : " + giac + " " + um;
+                } else {
+                    var message = "Qta Superiore a GIACENZA: " + giac + " " + um;
+                }
+                alert(message);
+                obj.focus();
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
-    if (ncolli == 2) {
-        url += "&extracollo";
+};
+
+
+function checkCollo(obj) {
+    var idpl = $('#idtesta').val();
+    soloNumeri("collo");
+    var collo = obj.value;
+    var close = $('#close').is(':checked');
+    var nColli = $('#ncolli').val();
+
+    if (collo == 0) {
+        return true;
     }
+
+    var url = window.basePATH + "plColloGet.php?id=" + idpl + "&termid=" + termid;
     var milliseconds = new Date().getTime();
     url += "&x=" + milliseconds;
     //alert(url);
@@ -90,14 +130,20 @@ function checkCollo(id, collo, close, ncolli) {
     httpXml.open("GET", url, false);
     httpXml.send(null);
     var cRet = httpXml.responseText;
-    //	alert(cRet);
-    if (document.getElementById("collo").readOnly) {
-        return true;
-    };
+    if (cRet != collo){
+        alert("Numero collo utilizzato da altro operatore\n" +
+            "Primo numero disponibile: " + cRet);
+        obj.value = cRet;
+    }
+
+    //prenoto il collo
+
+    //chiudo il collo
+    
     //cTest = cRet;
     if (cRet.slice(0, 2) !== "ok") {
         if (cRet.slice(0, 2).trim() === "0") {
-            alert("Collo gi� chiuso!");
+            alert("Collo chiuso!");
             return true;
         } else {
             alert("Numero collo utilizzato da altro operatore\n" +
@@ -109,36 +155,3 @@ function checkCollo(id, collo, close, ncolli) {
         return true;
     }
 }
-
-
-// ----------------
-
-var checkLotto2 = function (obj) {
-    var lotto = cleanCode(obj.value.trim());
-    if ("" == lotto) {
-        return true;
-    }
-    var soloce = $("#u_soloce").val();
-    var isIndustria = $("#is_industria").val();
-    if (lotto in listaLotti) {
-        if (soloce != "" && listaLotti[lotto]["u_noce"] != false) {
-            alert("Lotto " + lotto + " non di origine CEE. Non utilizzabile per questo cliente.");
-            obj.value = "";
-            obj.focus();
-            return false;
-        } else if (isIndustria != "" && listaLotti[lotto]["u_noindus"] != false) {
-            alert("Lotto " + lotto + " non per industria. Non utilizzabile per questo cliente.");
-            obj.value = "";
-            obj.focus();
-            return false;
-        } else {
-            obj.value = lotto;
-            document.getElementById('qta').focus();
-            return true;
-        }
-    }
-    alert("Lotto: " + lotto + " non valido per questo articolo.");
-    obj.value = "";
-    obj.focus();
-    return false;
-};

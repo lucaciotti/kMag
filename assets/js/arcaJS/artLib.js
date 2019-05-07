@@ -70,10 +70,13 @@ function checkCodiceArtix (cCodice, cCF) {
     return oRet;
 }
 
-function getLottiArti(cCodice, cCF) {
+function getLottiArti(cCodice, cLotto, cCF) {
     var url = window.basePATH + 'LottiGet.php?cod=' + encodeURIComponent(cCodice);
     if (cCF != "") {
         url = url + "&cf=" + cCF;
+    }
+    if (cLotto != "") {
+        url = url + "&lotto=" + cLotto;
     }
     var milliseconds = new Date().getTime();
     url += "&x=" + milliseconds;
@@ -95,6 +98,19 @@ function getLottiArti(cCodice, cCF) {
     // }
     // return oRet;
 }
+
+function checkGiacArtix (cCodice, cLotto, nEsercizio) {
+    var url = window.basePATH + 'giacArtGet.php?cod=' + encodeURIComponent(cCodice);
+    url = url + '&lotto=' + encodeURIComponent(cLotto);
+    url = url + '&esercizio=' + nEsercizio;
+    var milliseconds = new Date().getTime();
+    url += "&x=" + milliseconds;
+
+    makeHttpXml();
+    httpXml.open("GET", url, false);
+    httpXml.send(null);
+    return httpXml.responseText;
+};
 
 function checkUbicaz(idUbicaz) {
     "use strict";

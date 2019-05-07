@@ -46,3 +46,8 @@ var senduser = function(id_testa) {
 	sendUrl(url);
 };
 
+var soloNumeri = function (id) {
+    var valore = document.getElementById(id).value
+    valore = valore.replace(/[^\d]/g, '')
+    document.getElementById(id).value = valore
+};

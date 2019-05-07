@@ -6,4 +6,4 @@
     $ret = '';
 
     $result = PLUtils::getCollo($id, $termid);
-    var_dump($result);
+    print $result;

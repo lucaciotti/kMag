@@ -26,7 +26,7 @@
         <li><img src="../bcreader.gif" />&nbsp;<a href="askcp.php">Carico produzione</a></li>
 
         <h4>Spedizione Merci</h4>
-        <li><img src="../bcreader.gif" />&nbsp;<a href="pl_01_ask.php">Gestione packing list</a></li>
+        <li><img src="../bcreader.gif" />&nbsp;<a href="../plMake/01_ask.php">Gestione packing list</a></li>
         <li><img src="../bcreader.gif" />&nbsp;<a href="reprint-pl.php">Ristampa etichette colli</a></li>
         <li><img src="../bcreader.gif" />&nbsp;<a href="reprint-banc.php">Ristampa etichette bancali</a></li>
 
