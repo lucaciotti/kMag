@@ -10,9 +10,9 @@ if( isset($_COOKIE["tid"]) ) {
 
 // Calcolo dell'anno corrente
 function current_year() {
-// $lt = localtime(time(), true);
-// return ($lt[tm_year]+1900);
-return date("Y");
+	// $lt = localtime(time(), true);
+	// return ($lt[tm_year]+1900);
+	return date("Y");
 }
 
 
@@ -62,32 +62,6 @@ function goMain() {
 	print ("<br>\n<a class=\"menu\" href=\"../menus/main.php\"><img noborder src=\"b_home.gif\">Menu principale</a>\n");
 }
 
-// Riempie la combobox dei reparti
-function reparti($current, $db) {
-//global $connectionstring;
-
-$current=trim($current);
-$reparto="";
-print("<option value=\"$reparto\"");
-if ($reparto == $current) {
-  print(" selected=\"selected\""); }
-print(">$reparto</option>\n");
-
-//$conn = new COM("ADODB.Connection");
-//$conn->Open($connectionstring);
-$Query = "select * from u_reparti order by descrizion";
-if (!$db->Execute($Query)) print "<p> 01 - C'é un errore: " . $db->errorMsg() . "<p>";
-while(!$db->EOF) {
-  $reparto= trim($db->getField(codice));
-  print("<option value=\"$reparto\"");
-  if ($reparto == $current) {
-    print(" selected=\"selected\""); }
-  print(">" . trim($db->getField(descrizion)) . "</option>\n");
-  $db->MoveNext();
-  }
-
-}
-
 // prende il valore numerico di un parametro controllandone l'esistenza
 function getNumeric($param) {
 	return isset($_GET[$param]) ? ($_GET[$param] == "" ? 0 : $_GET[$param]) : 0;
@@ -100,36 +74,36 @@ function getString($param) {
 
 // Riempie la combobox degli utenti
 function utenti($current) {
-$current=trim($current);
-$user="";
-print('<option value="' . $user .'"');
-if ($user == $current) {
-  print(' selected="selected"'); }
-print('>' . $user .'</option>');
+	$current=trim($current);
+	$user="";
+	print('<option value="' . $user .'"');
+	if ($user == $current) {
+		print(' selected="selected"'); }
+	print('>' . $user .'</option>');
 
-$user="fabrizio";
-print('<option value="' . $user .'"');
-if ($user == $current) {
-  print(' selected="selected"'); }
-print('>' . $user .'</option>');
+	$user="fabrizio";
+	print('<option value="' . $user .'"');
+	if ($user == $current) {
+		print(' selected="selected"'); }
+	print('>' . $user .'</option>');
 
-$user="santarsiere";
-print('<option value="' . $user .'"');
-if ($user == $current) {
-  print(' selected="selected"'); }
-print('>' . $user .'</option>');
+	$user="santarsiere";
+	print('<option value="' . $user .'"');
+	if ($user == $current) {
+		print(' selected="selected"'); }
+	print('>' . $user .'</option>');
 
-$user="paolo";
-print('<option value="' . $user .'"');
-if ($user == $current) {
-  print(' selected="selected"'); }
-print('>' . $user .'</option>');
+	$user="paolo";
+	print('<option value="' . $user .'"');
+	if ($user == $current) {
+		print(' selected="selected"'); }
+	print('>' . $user .'</option>');
 
-$user="arfelli";
-print('<option value="' . $user .'"');
-if ($user == $current) {
-  print(' selected="selected"'); }
-print('>' . $user .'</option>');
+	$user="arfelli";
+	print('<option value="' . $user .'"');
+	if ($user == $current) {
+		print(' selected="selected"'); }
+	print('>' . $user .'</option>');
 
 }
 

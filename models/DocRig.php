@@ -44,4 +44,14 @@ class DocRig {
         return self::$conn->get($url, $queryUrl);
     }
 
+    public static function getByRifId($id, $columns=null){
+        self::initialize();
+
+        $url = 'docrigRifID/'.$id;
+        $queryUrl = '';
+        if($columns) $queryUrl = 'col='.$columns;
+
+        return self::$conn->get($url, $queryUrl);
+    }
+
 }

@@ -44,24 +44,29 @@
     $qtaRes = $plGet['data'][0]['quantitare'];
 
     $pbIns = PLUtils::insPBRow($id, $qta, $collo, $lotto, $fatt, $um, '', '', 0, 0, 0, 0, 0, 0, 0);
+    if ($pbIns!='success') print "<p> 01 - C'é un errore: " . $pbIns['error'] . "<p>" and die;
 
     if(!empty($artCollo)){
         $collo2 = ($nColli>1) ? $collo+1 : $collo;
         rint("Inserimento secondo collo<br>");
         $pbInsCollo2 = PLUtils::insPBRow($id, $qta, $collo2, $lotto, $fatt, $um, $artCollo, '', 0, 0, 0, 0, 0, 0, 0);
+        if ($pbInsCollo2!='success') print "<p> 01 - C'é un errore: " . $pbInsCollo2['error'] . "<p>" and die;
     }
 
     $pbRotella = PLUtils::addRotellaRows($plGet['data'][0]['riffromr'], $id, $qta, $collo);
 
     if($lotto != "") {
         $ocMod = PLUtils::insOCRow($plGet['data'][0]['riffromr'], $qta, $lotto);
+        if ($ocMod!='success') print "<p> 01 - C'é un errore: " . $ocMod['error'] . "<p>" and die;
     }
 
     if($close == 1) {
         //Nel dubbio chiudo tutto
         $chiudiCollo = PLUtils::chiudiCollo($id_pl, $termid, $collo);
+        if ($chiudiCollo!='success') print "<p> 01 - C'é un errore: " . $chiudiCollo['error'] . "<p>" and die;
         if($nColli>1){
             $chiudiCollo = PLUtils::chiudiCollo($id_pl, $termid, $collo+1);
+            if ($chiudiCollo!='success') print "<p> 01 - C'é un errore: " . $chiudiCollo['error'] . "<p>" and die;
         }
 
         header("location: 04_imb.php?id_pl=$id_pl&id=$id&collo=$collo&prt=$prt&ncolli=$nColli&artcollo=$artCollo&descollo=$desCollo");

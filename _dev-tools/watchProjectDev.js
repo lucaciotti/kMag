@@ -6,8 +6,8 @@ var rsync = new Rsync()
   .delete()
   .flags("avz")
   .set("exclude-from", "excluderSync")
-  // .source('/c/PROJECTS/kMag2/')
-  .source("/d/myProjects/kMag/")
+  .source('/c/PROJECTS/kMag2/')
+  // .source("/d/myProjects/kMag/")
   .destination("ced@172.16.9.39:/var/www/html/kMag2/");
 
 // console.log(process.cwd());

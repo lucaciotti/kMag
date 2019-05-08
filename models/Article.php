@@ -74,4 +74,26 @@ class Article {
         
         return self::$conn->get($url, $queryUrl);
     }
+
+    public static function getImballi($codeArt, $columns=null){
+        self::initialize();
+
+        $url = 'artImballi/';
+        if(!empty($codeArt)) $url = $url.$codeArt;
+        $queryUrl = '';
+        if($columns) $queryUrl = 'col='.$columns;
+
+        return self::$conn->get($url, $queryUrl);
+    }
+
+    public static function getPallets($codeArt, $columns=null){
+        self::initialize();
+
+        $url = 'artPallet/';
+        if(!empty($codeArt)) $url = $url.$codeArt;
+        $queryUrl = '';
+        if($columns) $queryUrl = 'col='.$columns;
+
+        return self::$conn->get($url, $queryUrl);
+    }
 }

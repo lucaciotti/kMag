@@ -368,7 +368,48 @@ function chkColloPann_click() {
     }
 }
 
+// SEZIONE IMBALLI
+function decodeImb(obj) {
+    if ("" == obj.value) {
+        return;
+    }
+    var oArt = checkCodiceArtix(obj.value);
+    obj.value = oArt.codice;
+    var collo = "";
+    if (oArt.codice != "" && oArt.isImballo == 0) {
+        alert("L'articolo non &egrave; un imballo.");
+        obj.value = "";
+        obj.focus();
+    } else if ("NOTA IMBALLO" == oArt.codice) {
+        var oRiga = getRigaDocx(292000000000 + document.getElementById("id").value * 1);
+        setMisuraImb(checkCodiceArtix(oRiga.getElementsByTagName("codicearti")[0].firstChild.nodeValue), collo);
+    } else {
+        setMisuraImb(oArt, collo);
+    }
+    // i fasci sono anche "bancali"
+    // ROBERTO 16.07.2013 Per il momento tale gestione � sospesa
+    // if( "#KZ-SCG(009)" == oArt.codice) {
+    // document.getElementById("hasbanc").checked = true;
+    // clickBancale();
+    // document.getElementById("closebanc").checked = true;
+    // showHideText(document.getElementById("closebanc"), 'askcodbanc');
+    // var lista = document.getElementById("codbanc");
+    // for (var i = 0; i < lista.options.length; i++) {
+    // if( lista.options[i].value == oArt.codice) {
+    // lista.options[i].selected = true;
+    // }
+    // }
+    // }
 
+    //LUCA PROVO A INSERIRE PESO AUTOMATICO FASCIO
+    // if ("#KZ-SCG(009)" == obj.value) {
+    var peso = getPeso("collo", document.getElementById("id").value, document.getElementById("collo").value);
+    //peso += oArt.xml.getElementsByTagName("u_misuras")[0].firstChild.nodeValue;
+    document.getElementById("pesocollo").value = peso;
+    // } else {
+    // 	document.getElementById("pesocollo").value = "";
+    // }
+}
 
 
 

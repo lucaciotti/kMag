@@ -1,6 +1,8 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'].'/kMag2/libs/arcaRestAPI.php');
 include_once($_SERVER['DOCUMENT_ROOT'].'/kMag2/models/DocRig.php');
+include_once($_SERVER['DOCUMENT_ROOT'].'/kMag2/models/DocTes.php');
+include_once($_SERVER['DOCUMENT_ROOT'].'/kMag2/models/Article.php');
 
 class PLUtils {
     private static $initialized;
@@ -139,20 +141,156 @@ class PLUtils {
 		    $cfData = simplexml_load_string($xmlRotella);           
 		    $cod = $cfData->serratura1->codice;
             if ("." != $cod) {
-                $this->insPBRow($idPL, $qta, $collo, '', 1, 'NR', $cod, '', 0, 0, 0, 0, 0, 0 );
+                self::insPBRow($idPL, $qta, $collo+1, '', 1, 'NR', $cod, '', 0, 0, 0, 0, 0, 0 );
                 print("Inserimento scasso 1<br>");
             }
 		    $cod = $cfData->serratura2->codice;
 		    if ("." != $cod) {
-			    $this->insPBRow($idPL, $qta, $collo, '', 1, 'NR', $cod, '', 0, 0, 0, 0, 0, 0 );
+			    self::insPBRow($idPL, $qta, $collo+1, '', 1, 'NR', $cod, '', 0, 0, 0, 0, 0, 0 );
 			    print("Inserimento scasso 2<br>");
             }
             $cod = $cfData->serratura->codice;
             if ("." != $cod) {
-                $this->insPBRow($idPL, $qta, $collo, '', 1, 'NR', $cod, '', 0, 0, 0, 0, 0, 0 );
+                self::insPBRow($idPL, $qta, $collo, '', 1, 'NR', $cod, '', 0, 0, 0, 0, 0, 0 );
                 print("Inserimento serratura<br>");
             }
-	    }
+        }
+        return true;
+    }
+
+    // RESTITUISCE RIGHE CHE SONO ANCORA IN TABELLA TEMP U_PLMOD
+    public static function getPLModRows($idPlRow, $nCollo=-1, $nBanc=null){
+        // se nCollo = -1 restituisce tutte le righe (se nBanc filtra righe bancale)
+        // se nCollo = 0 resituisce tutti le righe bancale (se nBanc solo riga bancale)
+        self::initialize();
+        $url = 'plUtils/getPlMod/'.$idPlRow.'/'.$nCollo;
+        if($nBanc){
+            $url = $url.'/'.$nBanc;
+        }
+        $res = self::$conn->get($url, null);
+        return res;
+    }
+
+    // RESTITUISCE RIGHE CREATE IN PB - preformattate per calcolo pesi
+    public static function getPBRows($idPbTes, $nCollo=-1, $nBanc=null){
+        // se nCollo = -1 restituisce tutte le righe (se nBanc filtra righe bancale)
+        // se nCollo = 0 resituisce tutti le righe bancale (se nBanc solo riga bancale)
+        self::initialize();
+        $url = 'plUtils/getPBRows/'.$idPbTes.'/'.$nCollo;
+        if($nBanc){
+            $url = $url.'/'.$nBanc;
+        }
+        $res = self::$conn->get($url, null);
+        return res;
+    }
+
+    // FUNZIONI PER IL CALCOLO DEL PESO NELLE PL
+    public static function getPesoNettoCollo($idTesPL, $idRowPL, $nCollo){
+        $isPB = false;
+        $isPlMod = false;
+        $pesoTot = 0;
+
+        $pbTesGet = DocTes::getByRifId($idTesPL, 'id,tipodoc');
+        if($pbTesGet['rows']>0){
+            if($pbTesGet['data'][0]['tipodoc']=='PB'){
+                $idTesPB = $pbTesGet['data'][0]['id']; 
+                $pbRowsGet = self::getPBRows($idTesPB, $nCollo);
+                if($pbRowsGet['rows']>0) $isPB = true;
+            }
+        }
+        $plModRows = self::getPLModRows($idRowPL, $nCollo);
+        if($plModRows['rows']>0) $isPlMod = true;
+
+        // Unisco i due risultati
+        if($isPB && $isPlMod) $allRows = array_merge($pbRowsGet['data'], $plModRows['data']);
+        if($isPB && !$isPlMod) $allRows = $pbRowsGet['data'];
+        if(!$isPB && $isPlMod) $allRows = $plModRows['data'];
+        if(!$isPB && !$isPlMod) return 0;
+
+        foreach ($allRows as $row) {
+			$fatt = $row['fatt'];
+			$pesounit = $row['pesounit'];
+			$qtat = $row['quantita'];
+			$pesoTot = $pesoTot + ($fatt*$pesounit*$qtat);
+        }
+        return $pesoTot;
+    }
+
+    public static function getPesoNettoBanc($idTesPL, $idRowPL, $nBanc){
+        $isPB = false;
+        $isPlMod = false;
+        $pesoTot = 0;
+        $nCollo = -1; //Prendo tutte le righe del bancale nBanc
+
+        $pbTesGet = DocTes::getByRifId($idTesPL, 'id,tipodoc');
+        if($pbTesGet['rows']>0){
+            if($pbTesGet['data'][0]['tipodoc']=='PB'){
+                $idTesPB = $pbTesGet['data'][0]['id']; 
+                $pbRowsGet = self::getPBRows($idTesPB, $nCollo, $nBanc);
+                if($pbRowsGet['rows']>0) $isPB = true;
+            }
+        }
+        $plModRows = self::getPLModRows($idRowPL, $nCollo, $nBanc);
+        if($plModRows['rows']>0) $isPlMod = true;
+
+        // Unisco i due risultati
+        if($isPB && $isPlMod) $allRows = array_merge($pbRowsGet['data'], $plModRows['data']);
+        if($isPB && !$isPlMod) $allRows = $pbRowsGet['data'];
+        if(!$isPB && $isPlMod) $allRows = $plModRows['data'];
+        if(!$isPB && !$isPlMod) return 0;
+
+        foreach ($allRows as $row) {
+			$fatt = $row['fatt'];
+			$pesounit = $row['pesounit'];
+			$qtat = $row['quantita'];
+			$pesoTot = $pesoTot + ($fatt*$pesounit*$qtat);
+        }
+        return $pesoTot;
+    }
+
+    public static function getPesoLordoBanc($idTesPL, $idRowPL, $nBanc){
+        $isPB = false;
+        $isPlMod = false;
+        $pesoTot = 0;
+        $nCollo = -1; //Prendo tutte le righe del bancale nBanc
+
+        $pbTesGet = DocTes::getByRifId($idTesPL, 'id,tipodoc');
+        if($pbTesGet['rows']>0){
+            if($pbTesGet['data'][0]['tipodoc']=='PB'){
+                $idTesPB = $pbTesGet['data'][0]['id']; 
+                $pbRowsGet = self::getPBRows($idTesPB, $nCollo, $nBanc);
+                if($pbRowsGet['rows']>0) $isPB = true;
+            }
+        }
+        $plModRows = self::getPLModRows($idRowPL, $nCollo, $nBanc);
+        if($plModRows['rows']>0) $isPlMod = true;
+
+        // Unisco i due risultati
+        if($isPB && $isPlMod) $allRows = array_merge($pbRowsGet['data'], $plModRows['data']);
+        if($isPB && !$isPlMod) $allRows = $pbRowsGet['data'];
+        if(!$isPB && $isPlMod) $allRows = $plModRows['data'];
+        if(!$isPB && !$isPlMod) return 0;
+
+        foreach ($allRows as $row) {
+			$fatt = $row['fatt'];
+			$pesolordo = $row['pesolordo'];
+			$qtat = $row['quantita'];
+			$pesoTot = $pesoTot + ($fatt*$pesolordo*$qtat);
+        }
+        return $pesoTot;
+    }
+
+    public static function getRepartoPl($idRowPL){
+        $rep = '';
+        $plGet = DocRig::getById($idRowPL, 'rifcer,codicearti');
+        if($plGet['rows']>0){
+            $rep = $plGet['rows'][0]['rifcer'];
+            if(empty($rep)){
+                $artGet = Article::getArticle($plGet['rows'][0]['codicearti'], 'u_reparto');
+                if($artGet['rows']>0) $rep = $artGet['rows'][0]['u_reparto'];
+            }
+        }
+        return $rep;
     }
 
 }
