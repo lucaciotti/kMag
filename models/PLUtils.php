@@ -15,70 +15,138 @@ class PLUtils {
         self::$initialized = true;
     }
 
-    public static function getColloByTermId($idtesta, $termid){
-        self::initialize();
+    // FUNZIONI COLLO
+        public static function getColloByTermId($idtesta, $termid){
+            self::initialize();
 
-        $url = 'plUtils/getColloByTermId/'.$idtesta.'/'.$termid.'/';
-        $res = self::$conn->get($url, null);
-        if($res['rows']>0) {
-            return (integer)$res['data'][0]['collo'];
-        } else {
-            return -1;
+            $url = 'plUtils/getColloByTermId/'.$idtesta.'/'.$termid.'/';
+            $res = self::$conn->get($url, null);
+            if($res['rows']>0) {
+                return (integer)$res['data'][0]['collo'];
+            } else {
+                return -1;
+            }
         }
-    }
 
-    public static function getColloByCollo($idtesta, $collo){
-        self::initialize();
+        public static function getColloByCollo($idtesta, $collo){
+            self::initialize();
 
-        $url = 'plUtils/getColloByNCollo/'.$idtesta.'/'.$collo.'/';
-        $res = self::$conn->get($url, null);
-        if($res['rows']>0) {
-            return (integer)$res['data'][0]['id_term'];
-        } else {
-            return -1;
+            $url = 'plUtils/getColloByNCollo/'.$idtesta.'/'.$collo.'/';
+            $res = self::$conn->get($url, null);
+            if($res['rows']>0) {
+                return (integer)$res['data'][0]['id_term'];
+            } else {
+                return -1;
+            }
         }
-    }
 
-    public static function getNewCollo($idtesta){
-        self::initialize();
-        $url = 'plUtils/getLastCollo/'.$idtesta;
-        $res = self::$conn->get($url, null);
-        if($res['rows']>0) {
-            $last=(integer)$res['data'][0]['lastcollo'];
-            return $last+1;
-        } else {
-            //PL immacolata
-            return 1;
+        public static function getNewCollo($idtesta){
+            self::initialize();
+            $url = 'plUtils/getLastCollo/'.$idtesta;
+            $res = self::$conn->get($url, null);
+            if($res['rows']>0) {
+                $last=(integer)$res['data'][0]['lastcollo'];
+                return $last+1;
+            } else {
+                //PL immacolata
+                return 1;
+            }
         }
-    }
 
-    public static function insCollo($idtesta, $termid, $collo){
-        self::initialize();
+        public static function insCollo($idtesta, $termid, $collo){
+            self::initialize();
 
-        $data = array(
-            "id"        => $idtesta,
-            "nCollo"    => $collo,
-            "termid"    => $termid
-        );
-        // var_dump($data);
-        $url = 'plUtils/insertCollo';
-        $res = self::$conn->post($url, $data);
-        return $res;
-    }
+            $data = array(
+                "id"        => $idtesta,
+                "nCollo"    => $collo,
+                "termid"    => $termid
+            );
+            // var_dump($data);
+            $url = 'plUtils/insertCollo';
+            $res = self::$conn->post($url, $data);
+            return $res;
+        }
 
-    public static function chiudiCollo($idtesta, $termid, $collo){
-        self::initialize();
+        public static function chiudiCollo($idtesta, $termid, $collo){
+            self::initialize();
 
-        $data = array(
-            "id"        => $idtesta,
-            "nCollo"    => $collo,
-            "termid"    => $termid
-        );
-        // var_dump($data);
-        $url = 'plUtils/chiudiCollo';
-        $res = self::$conn->put($url, $data);
-        return $res;
-    }
+            $data = array(
+                "id"        => $idtesta,
+                "nCollo"    => $collo,
+                "termid"    => $termid
+            );
+            // var_dump($data);
+            $url = 'plUtils/chiudiCollo';
+            $res = self::$conn->put($url, $data);
+            return $res;
+        }
+
+    // FUNZIONI BANCALE
+        public static function getBancByRep($idtesta, $rep){
+            self::initialize();
+
+            $url = 'plUtils/getBancByReparto/'.$idtesta.'/'.$rep.'/';
+            $res = self::$conn->get($url, null);
+            if($res['rows']>0) {
+                return (integer)$res['data'][0]['bancale'];
+            } else {
+                return -1;
+            }
+        }
+
+        public static function getBancByBanc($idtesta, $banc){
+            self::initialize();
+
+            $url = 'plUtils/getBancByNBanc/'.$idtesta.'/'.$banc.'/';
+            $res = self::$conn->get($url, null);
+            if($res['rows']>0) {
+                return (integer)$res['data'][0]['reparto'];
+            } else {
+                return -1;
+            }
+        }
+
+        public static function getNewBanc($idtesta){
+            self::initialize();
+            $url = 'plUtils/getLastBanc/'.$idtesta;
+            $res = self::$conn->get($url, null);
+            if($res['rows']>0) {
+                $last=(integer)$res['data'][0]['lastbanc'];
+                return $last+1;
+            } else {
+                //PL immacolata
+                return 1;
+            }
+        }
+
+        public static function insBanc($idtesta, $reparto, $nBanc){
+            self::initialize();
+
+            $data = array(
+                "id"        => $idtesta,
+                "nBanc"     => $nBanc,
+                "reparto"   => $reparto
+            );
+            // var_dump($data);
+            $url = 'plUtils/insertBanc';
+            $res = self::$conn->post($url, $data);
+            return $res;
+        }
+
+        public static function chiudiBanc($idtesta, $reparto, $nBanc){
+            self::initialize();
+
+            $data = array(
+                "id"        => $idtesta,
+                "nBanc"     => $nBanc,
+                "reparto"   => $reparto
+            );
+            // var_dump($data);
+            $url = 'plUtils/chiudiBanc';
+            $res = self::$conn->put($url, $data);
+            return $res;
+        }
+
 
     public static function insPBRow($id, $qta=0, $collo, $lotto='', $fatt=0, $um='', $articolo='', $reparto='', $bancale=0, $altezza=0, $misural=0, $misuras=0, $misurah=0, $peso=0, $modify=0){
         self::initialize();
@@ -185,101 +253,101 @@ class PLUtils {
     }
 
     // FUNZIONI PER IL CALCOLO DEL PESO NELLE PL
-    public static function getPesoNettoCollo($idTesPL, $idRowPL, $nCollo){
-        $isPB = false;
-        $isPlMod = false;
-        $pesoTot = 0;
+        public static function getPesoNettoCollo($idTesPL, $idRowPL, $nCollo){
+            $isPB = false;
+            $isPlMod = false;
+            $pesoTot = 0;
 
-        $pbTesGet = DocTes::getByRifId($idTesPL, 'id,tipodoc');
-        if($pbTesGet['rows']>0){
-            if($pbTesGet['data'][0]['tipodoc']=='PB'){
-                $idTesPB = $pbTesGet['data'][0]['id']; 
-                $pbRowsGet = self::getPBRows($idTesPB, $nCollo);
-                if($pbRowsGet['rows']>0) $isPB = true;
+            $pbTesGet = DocTes::getByRifId($idTesPL, 'id,tipodoc');
+            if($pbTesGet['rows']>0){
+                if($pbTesGet['data'][0]['tipodoc']=='PB'){
+                    $idTesPB = $pbTesGet['data'][0]['id']; 
+                    $pbRowsGet = self::getPBRows($idTesPB, $nCollo);
+                    if($pbRowsGet['rows']>0) $isPB = true;
+                }
             }
-        }
-        $plModRows = self::getPLModRows($idRowPL, $nCollo);
-        if($plModRows['rows']>0) $isPlMod = true;
+            $plModRows = self::getPLModRows($idRowPL, $nCollo);
+            if($plModRows['rows']>0) $isPlMod = true;
 
-        // Unisco i due risultati
-        if($isPB && $isPlMod) $allRows = array_merge($pbRowsGet['data'], $plModRows['data']);
-        if($isPB && !$isPlMod) $allRows = $pbRowsGet['data'];
-        if(!$isPB && $isPlMod) $allRows = $plModRows['data'];
-        if(!$isPB && !$isPlMod) return 0;
+            // Unisco i due risultati
+            if($isPB && $isPlMod) $allRows = array_merge($pbRowsGet['data'], $plModRows['data']);
+            if($isPB && !$isPlMod) $allRows = $pbRowsGet['data'];
+            if(!$isPB && $isPlMod) $allRows = $plModRows['data'];
+            if(!$isPB && !$isPlMod) return 0;
 
-        foreach ($allRows as $row) {
-			$fatt = $row['fatt'];
-			$pesounit = $row['pesounit'];
-			$qtat = $row['quantita'];
-			$pesoTot = $pesoTot + ($fatt*$pesounit*$qtat);
-        }
-        return $pesoTot;
-    }
-
-    public static function getPesoNettoBanc($idTesPL, $idRowPL, $nBanc){
-        $isPB = false;
-        $isPlMod = false;
-        $pesoTot = 0;
-        $nCollo = -1; //Prendo tutte le righe del bancale nBanc
-
-        $pbTesGet = DocTes::getByRifId($idTesPL, 'id,tipodoc');
-        if($pbTesGet['rows']>0){
-            if($pbTesGet['data'][0]['tipodoc']=='PB'){
-                $idTesPB = $pbTesGet['data'][0]['id']; 
-                $pbRowsGet = self::getPBRows($idTesPB, $nCollo, $nBanc);
-                if($pbRowsGet['rows']>0) $isPB = true;
+            foreach ($allRows as $row) {
+                $fatt = $row['fatt'];
+                $pesounit = $row['pesounit'];
+                $qtat = $row['quantita'];
+                $pesoTot = $pesoTot + ($fatt*$pesounit*$qtat);
             }
+            return $pesoTot;
         }
-        $plModRows = self::getPLModRows($idRowPL, $nCollo, $nBanc);
-        if($plModRows['rows']>0) $isPlMod = true;
 
-        // Unisco i due risultati
-        if($isPB && $isPlMod) $allRows = array_merge($pbRowsGet['data'], $plModRows['data']);
-        if($isPB && !$isPlMod) $allRows = $pbRowsGet['data'];
-        if(!$isPB && $isPlMod) $allRows = $plModRows['data'];
-        if(!$isPB && !$isPlMod) return 0;
+        public static function getPesoNettoBanc($idTesPL, $idRowPL, $nBanc){
+            $isPB = false;
+            $isPlMod = false;
+            $pesoTot = 0;
+            $nCollo = -1; //Prendo tutte le righe del bancale nBanc
 
-        foreach ($allRows as $row) {
-			$fatt = $row['fatt'];
-			$pesounit = $row['pesounit'];
-			$qtat = $row['quantita'];
-			$pesoTot = $pesoTot + ($fatt*$pesounit*$qtat);
-        }
-        return $pesoTot;
-    }
-
-    public static function getPesoLordoBanc($idTesPL, $idRowPL, $nBanc){
-        $isPB = false;
-        $isPlMod = false;
-        $pesoTot = 0;
-        $nCollo = -1; //Prendo tutte le righe del bancale nBanc
-
-        $pbTesGet = DocTes::getByRifId($idTesPL, 'id,tipodoc');
-        if($pbTesGet['rows']>0){
-            if($pbTesGet['data'][0]['tipodoc']=='PB'){
-                $idTesPB = $pbTesGet['data'][0]['id']; 
-                $pbRowsGet = self::getPBRows($idTesPB, $nCollo, $nBanc);
-                if($pbRowsGet['rows']>0) $isPB = true;
+            $pbTesGet = DocTes::getByRifId($idTesPL, 'id,tipodoc');
+            if($pbTesGet['rows']>0){
+                if($pbTesGet['data'][0]['tipodoc']=='PB'){
+                    $idTesPB = $pbTesGet['data'][0]['id']; 
+                    $pbRowsGet = self::getPBRows($idTesPB, $nCollo, $nBanc);
+                    if($pbRowsGet['rows']>0) $isPB = true;
+                }
             }
+            $plModRows = self::getPLModRows($idRowPL, $nCollo, $nBanc);
+            if($plModRows['rows']>0) $isPlMod = true;
+
+            // Unisco i due risultati
+            if($isPB && $isPlMod) $allRows = array_merge($pbRowsGet['data'], $plModRows['data']);
+            if($isPB && !$isPlMod) $allRows = $pbRowsGet['data'];
+            if(!$isPB && $isPlMod) $allRows = $plModRows['data'];
+            if(!$isPB && !$isPlMod) return 0;
+
+            foreach ($allRows as $row) {
+                $fatt = $row['fatt'];
+                $pesounit = $row['pesounit'];
+                $qtat = $row['quantita'];
+                $pesoTot = $pesoTot + ($fatt*$pesounit*$qtat);
+            }
+            return $pesoTot;
         }
-        $plModRows = self::getPLModRows($idRowPL, $nCollo, $nBanc);
-        if($plModRows['rows']>0) $isPlMod = true;
 
-        // Unisco i due risultati
-        if($isPB && $isPlMod) $allRows = array_merge($pbRowsGet['data'], $plModRows['data']);
-        if($isPB && !$isPlMod) $allRows = $pbRowsGet['data'];
-        if(!$isPB && $isPlMod) $allRows = $plModRows['data'];
-        if(!$isPB && !$isPlMod) return 0;
+        public static function getPesoLordoBanc($idTesPL, $idRowPL, $nBanc){
+            $isPB = false;
+            $isPlMod = false;
+            $pesoTot = 0;
+            $nCollo = -1; //Prendo tutte le righe del bancale nBanc
 
-        foreach ($allRows as $row) {
-			$fatt = $row['fatt'];
-			$pesolordo = $row['pesolordo'];
-			$qtat = $row['quantita'];
-			$pesoTot = $pesoTot + ($fatt*$pesolordo*$qtat);
+            $pbTesGet = DocTes::getByRifId($idTesPL, 'id,tipodoc');
+            if($pbTesGet['rows']>0){
+                if($pbTesGet['data'][0]['tipodoc']=='PB'){
+                    $idTesPB = $pbTesGet['data'][0]['id']; 
+                    $pbRowsGet = self::getPBRows($idTesPB, $nCollo, $nBanc);
+                    if($pbRowsGet['rows']>0) $isPB = true;
+                }
+            }
+            $plModRows = self::getPLModRows($idRowPL, $nCollo, $nBanc);
+            if($plModRows['rows']>0) $isPlMod = true;
+
+            // Unisco i due risultati
+            if($isPB && $isPlMod) $allRows = array_merge($pbRowsGet['data'], $plModRows['data']);
+            if($isPB && !$isPlMod) $allRows = $pbRowsGet['data'];
+            if(!$isPB && $isPlMod) $allRows = $plModRows['data'];
+            if(!$isPB && !$isPlMod) return 0;
+
+            foreach ($allRows as $row) {
+                $fatt = $row['fatt'];
+                $pesolordo = $row['pesolordo'];
+                $qtat = $row['quantita'];
+                $pesoTot = $pesoTot + ($fatt*$pesolordo*$qtat);
+            }
+            return $pesoTot;
         }
-        return $pesoTot;
-    }
-
+    
     public static function getRepartoPl($idRowPL){
         $rep = '';
         $plGet = DocRig::getById($idRowPL, 'rifcer,codicearti');

@@ -60,7 +60,7 @@
                 Secondo collo
                 <br/>
                 <label for="art">Imballo</label>
-                <input type="text" id="art2" name="art2" onblur="decodeImb2(this);">
+                <input type="text" id="art2" name="art2" onblur="decodeImb(this, true);">
                 <br/>
 
                 <fieldset>
@@ -90,8 +90,8 @@
         <label for="rep">Reparto</label>
         <br/>
         <select id="rep" name="rep">
-            <?php foreach($listReparti['data'] as $pallet){ ?>
-                <option value="<?php print $pallet['codice'] ?>" <?php ($reparto==$pallet['codice'] ? print "selected=selected" : "") ?>><?php print $pallet['descrizion'] ?></option>
+            <?php foreach($listReparti['data'] as $rep){ ?>
+                <option value="<?php print $rep['codice'] ?>" <?php ($reparto==$rep['codice'] ? print "selected=selected" : "") ?>><?php print $rep['descrizion'] ?></option>
             <?php } ?>
         </select>
 
@@ -143,6 +143,7 @@
             hiddenField("artcollo",$artCollo);
             hiddenField("descollo",$desCollo);
             hiddenField("ncolli",$nColli);
+            hiddenField("isFiliale", CONFIG::$IS_FILIALE);
         ?>
                         
         <br/>

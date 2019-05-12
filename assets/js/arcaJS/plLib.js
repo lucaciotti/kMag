@@ -369,48 +369,274 @@ function chkColloPann_click() {
 }
 
 // SEZIONE IMBALLI
-function decodeImb(obj) {
-    if ("" == obj.value) {
+function decodeImb(obj, isSecondo = false) {
+    var val = cleanCode(obj.value.trim().toUpperCase());
+    var colloDoppio = (isSecondo ? '' : '2');
+    if (val != "") {
+        var oArt = checkCodiceArtix(val);
+        var codImb = String(oArt.codice).trim();
+        var isImballo = oArt.xml.getElementsByTagName("imballo")[0].firstChild.nodeValue;
+        if (codImb != '' && isImballo == 0) {
+            alert("L'articolo non &egrave; un imballo.");
+            obj.value = "";
+            obj.focus();
+        } else if (codImb == "NOTA IMBALLO") {
+            if (isSecondo) {
+                setMisuraImb(checkCodiceArtix($("#artcollo").val()), colloDoppio);
+            } else {
+                var oRiga = getRigaDocx($("#id").val() * 1);
+                var artPL = oRiga.getElementsByTagName("codicearti")[0].firstChild.nodeValue;
+                setMisuraImb(checkCodiceArtix(artPL), colloDoppio);
+            }
+        } else {
+            setMisuraImb(oArt, colloDoppio);
+        }
+    }
+
+    //SE FILIALE INSERISCO SEMPRE PESO - ALTRIMENTI SOLO SE FASCIO
+    if ($("#isFiliale").val()) {
+        if (isSecondo) {
+            var peso = getPesoCollo($("#id_pl").val(), $("#id").val(), (($('#collo').val() * 1) + 1));
+            $("#pesocollo2").val(peso);
+        } else {
+            var peso = getPesoCollo($("#id_pl").val(), $("#id").val(), $('#collo').val());
+            $("#pesocollo").val(peso);
+        }
+    } else {
+        if (codImb == "#KZ-SCG(009)") {
+            if (isSecondo) {
+                var peso = getPesoCollo($("#id_pl").val(), $("#id").val(), (($('#collo').val() * 1) + 1));
+                $("#pesocollo2").val(peso);
+            } else {
+                var peso = getPesoCollo($("#id_pl").val(), $("#id").val(), $('#collo').val());
+                $("#pesocollo").val(peso);
+            }
+        }
+    }
+
+    obj.value = codImb;
+}
+
+function chkPesoCollo(obj, isSecondo = false) {
+    if (isSecondo) {
+        var peso = getPesoCollo($("#id_pl").val(), $("#id").val(), (($('#collo').val() * 1) + 1));
+    } else {
+        var peso = getPesoCollo($("#id_pl").val(), $("#id").val(), $('#collo').val());
+    }
+    if (obj.value < peso) {
+        alert("Attenzione:\nPeso inferiore al peso netto");
+    }
+    if (obj.value > peso * 1.1) {
+        alert("Attenzione:\nDifferenza con il peso teorico\nsuperiore al 10%");
+    }
+}
+
+function clickBancale() {
+    var isBanc = $("#hasbanc").is(":checked");
+    if (isBanc) {
+        $("#askbanc").show();
+        return checkBanc(false, true);
+    } else {
+        $("#askbanc").hide();
+    }
+}
+
+//TODOOOOOOOO
+function checkBanc(reserve, close, quiet = true) {
+    soloNumeri("bancnum");
+    var nBanc = $("#bancnum").val();
+    if (nBanc == 0) {
+        alert("Numero bancale non specificato!");
+        return false;
+    }
+    var idpl = $("#id_pl").val();
+    var rep = $("#rep option:selected").val();
+    var bancReserved = false;
+
+    //Controllo bancale sia disponibile
+    {
+        var url = window.basePATH + "plBancGetByRep.php?id=" + idpl + "&rep=" + rep + noCache();
+        makeHttpXml();
+        httpXml.open("GET", url, false);
+        httpXml.send(null);
+        var cRet = httpXml.responseText;
+        if (cRet == -1) {
+            //nessun bancale prenotato da reparto
+            bancReserved = false;
+            console.log("NO banc prenotato da rep ", rep);
+            //prendo nuovo bancale
+            url = window.basePATH + "plBancNew.php?id=" + idpl + noCache();
+            makeHttpXml();
+            httpXml.open("GET", url, false);
+            httpXml.send(null);
+            var newBanc = httpXml.responseText;
+            $("#bancnum").val(newBanc);
+            nBanc = newBanc;
+            bancReserved = false;
+            console.log("nuovo bancale preso", bancReserved);
+        } else {
+            // già prenotato da questo reparto
+            $("#bancnum").val(cRet);
+            nBanc = cRet;
+            bancReserved = false;
+            bancReserved = true;
+            console.log("già prenotato", bancReserved);
+        }
+    }
+
+    //prenoto il bancale
+    if (!bancReserved) {
+        var url =
+            window.basePATH +
+            "plBancIns.php?id=" +
+            idpl +
+            "&termid=" +
+            termid +
+            "&collo=" +
+            collo;
+        var milliseconds = new Date().getTime();
+        url += "&x=" + milliseconds;
+        //alert(url);
+        makeHttpXml();
+        httpXml.open("GET", url, false);
+        httpXml.send(null);
+        var cRet = httpXml.responseText;
+        if (cRet != "success") {
+            alert("Something Wrong appened!");
+            return false;
+        }
+        colloReserved = true;
+    }
+    if (nColli > 1 && !collo2Reserved) {
+        var url =
+            window.basePATH +
+            "plColloIns.php?id=" +
+            idpl +
+            "&termid=" +
+            termid +
+            "&collo=" +
+            collo + 1;
+        var milliseconds = new Date().getTime();
+        url += "&x=" + milliseconds;
+        //alert(url);
+        makeHttpXml();
+        httpXml.open("GET", url, false);
+        httpXml.send(null);
+        var cRet = httpXml.responseText;
+        if (cRet != "success") {
+            alert("Something Wrong appened!");
+            return false;
+        }
+        collo2Reserved = true;
+    }
+    //chiudo il collo
+    if (close && colloReserved) {
+        var url =
+            window.basePATH +
+            "plColloChiudi.php?id=" +
+            idpl +
+            "&termid=" +
+            termid +
+            "&collo=" +
+            collo;
+        var milliseconds = new Date().getTime();
+        url += "&x=" + milliseconds;
+        //alert(url);
+        makeHttpXml();
+        httpXml.open("GET", url, false);
+        httpXml.send(null);
+        var cRet = httpXml.responseText;
+        if (cRet != "success") {
+            alert("Something Wrong appened!");
+            return false;
+        }
+    }
+    if (close && collo2Reserved) {
+        var url =
+            window.basePATH +
+            "plColloChiudi.php?id=" +
+            idpl +
+            "&termid=" +
+            termid +
+            "&collo=" +
+            collo + 1;
+        var milliseconds = new Date().getTime();
+        url += "&x=" + milliseconds;
+        //alert(url);
+        makeHttpXml();
+        httpXml.open("GET", url, false);
+        httpXml.send(null);
+        var cRet = httpXml.responseText;
+        if (cRet != "success") {
+            alert("Something Wrong appened!");
+            return false;
+        }
+    }
+    return true;
+}
+
+
+function decodeBanc(obj) {
+    if ("" == obj.value || "NONE" == obj.value) {
+        alert("L'articolo non e' un bancale.");
         return;
     }
     var oArt = checkCodiceArtix(obj.value);
-    obj.value = oArt.codice;
-    var collo = "";
-    if (oArt.codice != "" && oArt.isImballo == 0) {
-        alert("L'articolo non &egrave; un imballo.");
-        obj.value = "";
-        obj.focus();
-    } else if ("NOTA IMBALLO" == oArt.codice) {
-        var oRiga = getRigaDocx(292000000000 + document.getElementById("id").value * 1);
-        setMisuraImb(checkCodiceArtix(oRiga.getElementsByTagName("codicearti")[0].firstChild.nodeValue), collo);
-    } else {
-        setMisuraImb(oArt, collo);
-    }
-    // i fasci sono anche "bancali"
-    // ROBERTO 16.07.2013 Per il momento tale gestione � sospesa
-    // if( "#KZ-SCG(009)" == oArt.codice) {
-    // document.getElementById("hasbanc").checked = true;
-    // clickBancale();
-    // document.getElementById("closebanc").checked = true;
-    // showHideText(document.getElementById("closebanc"), 'askcodbanc');
-    // var lista = document.getElementById("codbanc");
-    // for (var i = 0; i < lista.options.length; i++) {
-    // if( lista.options[i].value == oArt.codice) {
-    // lista.options[i].selected = true;
-    // }
-    // }
-    // }
+    document.getElementById("pal_u_misural").value = oArt.xml.getElementsByTagName("u_misural")[0].firstChild.nodeValue;
+    document.getElementById("pal_u_misuras").value = oArt.xml.getElementsByTagName("u_misuras")[0].firstChild.nodeValue;
 
-    //LUCA PROVO A INSERIRE PESO AUTOMATICO FASCIO
+    // Roberto 30.09.2014
+    // Solo per i fasci preimpostiamo il peso
     // if ("#KZ-SCG(009)" == obj.value) {
-    var peso = getPeso("collo", document.getElementById("id").value, document.getElementById("collo").value);
-    //peso += oArt.xml.getElementsByTagName("u_misuras")[0].firstChild.nodeValue;
-    document.getElementById("pesocollo").value = peso;
+    var peso = getPeso("banc", document.getElementById("id").value, document.getElementById("bancnum").value);
+    peso += getPeso("collo", document.getElementById("id").value, document.getElementById("collo").value);
+    peso += oArt.xml.getElementsByTagName("u_misuras")[0].firstChild.nodeValue;
+    document.getElementById("pesobanc").value = peso;
     // } else {
-    // 	document.getElementById("pesocollo").value = "";
+    // document.getElementById("pesobanc").value = "";
     // }
 }
 
+
+// UTILITY IMBALLO
+
+function setMisuraImb(oArt, collo) {
+    $("#imb_u_misural" + collo).val(oArt.xml.getElementsByTagName("u_misural")[0].firstChild.nodeValue);
+    $("#imb_u_misurah" + collo).val(oArt.xml.getElementsByTagName("u_misurah")[0].firstChild.nodeValue);
+    $("#imb_u_misuras" + collo).val(oArt.xml.getElementsByTagName("u_misuras")[0].firstChild.nodeValue);
+};
+
+function copiaVal(orig, dest) {
+    if ($("#art").val() == "#KZ-SCG(009)") {
+        dest.val(orig.val());
+    }
+};
+
+function getRigaDocx(cId) {
+    var url = window.basePATH + 'docRigGet.php?cod=' + encodeURIComponent(cId);
+    var milliseconds = new Date().getTime();
+    url += "&x=" + milliseconds;
+    makeHttpXml();
+    httpXml.open("GET", url, false);
+    httpXml.send(null);
+    return httpXml.responseXML;
+}
+
+function getPesoCollo(idTespl, idRowPl, nCollo) {
+    var url = window.basePATH + "plPesoColloGet.php?idTesPl=" + idTespl + "&idRowPl=" + idRowPl + "&collo=" + nCollo + noCache();
+    makeHttpXml();
+    httpXml.open("GET", url, false);
+    httpXml.send(null);
+    return httpXml.responseText;
+}
+
+function getPesoBanc(idTespl, idRowPl, nBanc, mode) {
+    var url = window.basePATH + "plPesoColloGet.php?idTesPl=" + idTespl + "&idRowPl=" + idRowPl + "&banc=" + nBanc + "&mode=" + mode + noCache();
+    makeHttpXml();
+    httpXml.open("GET", url, false);
+    httpXml.send(null);
+    return httpXml.responseText;
+}
 
 
 

@@ -16,6 +16,7 @@ class CONFIG {
 
     public static $BANC_PRT = '';
 
+    public static $IS_FILIALE = true;
     // private static function initialize(){
     //     if (self::$initialized) return;
         
