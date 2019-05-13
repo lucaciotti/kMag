@@ -27,7 +27,7 @@
 </style>
 
 <div style="width: 250px">
-    <form name="plimb" method="get" action="pl_05_wrImb.php" onsubmit="return checkImbForm();">
+    <form name="plimb" method="get" action="05_wrtImb.php" onsubmit="return checkImbForm();">
 
         <label for="art">Imballo</label>
         <input type="text" id="art" name="art" onblur="decodeImb(this);">
@@ -101,7 +101,7 @@
         <div id="askbanc" style="background: #c0e0ff; display: none;">
             <label for="bancnum">Bancale</label>
             <input type="text" id="bancnum" name="bancnum" size="2" value="1">
-            <input type="checkbox" id="closebanc" name="closebanc" value="close" onclick="showHideText(this, 'askcodbanc');"> 
+            <input type="checkbox" id="closebanc" name="closebanc" value="close" onclick="showAskBanc();"> 
             <label for="closebanc" class="checkbox">Chiudi bancale</label>
             
             <div id="askcodbanc" style="display: none;">
@@ -127,7 +127,7 @@
 
                 <fieldset>
                     <legend>Peso bancale in kg</legend>
-                    <input type="text" size="4" name="pesobanc" id="pesobanc">
+                    <input type="text" size="4" name="pesobanc" id="pesobanc" onchange="checkPesoBanc(this);">
                 </fieldset>
 
                 <input type="checkbox" id="prtbanc" name="prtbanc" value="1">

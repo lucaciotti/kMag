@@ -48,7 +48,7 @@
 
     if(!empty($artCollo)){
         $collo2 = ($nColli>1) ? $collo+1 : $collo;
-        rint("Inserimento secondo collo<br>");
+        print("Inserimento secondo collo<br>");
         $pbInsCollo2 = PLUtils::insPBRow($id, $qta, $collo2, $lotto, $fatt, $um, $artCollo, '', 0, 0, 0, 0, 0, 0, 0);
         if ($pbInsCollo2!='success') print "<p> 01 - C'é un errore: " . $pbInsCollo2['error'] . "<p>" and die;
     }
