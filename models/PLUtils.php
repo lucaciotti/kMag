@@ -147,6 +147,35 @@ class PLUtils {
         return $res;
     }
 
+    public static function updBancToColloInPB($idRifTesPl, $idTesPB, $nBanc, $nCollo){
+        self::initialize();
+
+        $data = array(
+            "riffromt"  => $idRifTesPl,
+            "idTesPB"   => $idTesPB,
+            "collo"     => $nCollo,
+            "banc"      => $nBanc
+        );
+        // var_dump($data);
+        $url = 'plUtils/updBancToColloInPB';
+        $res = self::$conn->put($url, $data);
+        return $res;
+    }
+
+    public static function updBancToColloInPlMod($idRowPL, $nBanc, $nCollo){
+        self::initialize();
+
+        $data = array(
+            "idRowPl"   => $idRowPl,
+            "collo"     => $nCollo,
+            "banc"      => $nBanc
+        );
+        // var_dump($data);
+        $url = 'plUtils/updBancToColloInPlMod';
+        $res = self::$conn->put($url, $data);
+        return $res;
+    }
+
 
     public static function insPBRow($id, $qta=0, $collo, $lotto='', $fatt=0, $um='', $articolo='', $reparto='', $bancale=0, $altezza=0, $misural=0, $misuras=0, $misurah=0, $peso=0, $modify=0){
         self::initialize();

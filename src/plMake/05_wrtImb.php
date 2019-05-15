@@ -22,6 +22,7 @@
     $nColli = getNumeric('ncolli');
     $rep = $_GET['rep'];
     $hasbanc = isset($_GET['hasbanc']);
+    $closeBanc = isset($_GET['closebanc']);
     $banc = getNumeric('bancnum');
     $banc = ($hasbanc ? $banc : 0);
     $codBanc = getString('codbanc');
@@ -56,7 +57,18 @@
         }
 
         if($hasbanc) {
-            //TODOOOOOO
+            $pbUpdBanc = PLUtils::updBancToColloInPB($idTesPl, null, $banc, $collo);
+            if ($pbUpdBanc!='success') print "<p> 01 - C'é un errore: " . $pbUpdBanc['error'] . "<p>" and die;
+            $plModUpdBanc = PLUtils::updBancToColloInPlMod($idRowPl, $banc, $collo);
+            if ($plModUpdBanc!='success') print "<p> 01 - C'é un errore: " . $plModUpdBanc['error'] . "<p>" and die;
+            if($nColli>1){
+                $pbUpdBanc2 = PLUtils::updBancToColloInPB($idTesPl, null, $banc, $collo2);
+                if ($pbUpdBanc2!='success') print "<p> 01 - C'é un errore: " . $pbUpdBanc2['error'] . "<p>" and die;
+                $plModUpdBanc2 = PLUtils::updBancToColloInPlMod($idRowPl, $banc, $collo2);
+                if ($plModUpdBanc2!='success') print "<p> 01 - C'é un errore: " . $plModUpdBanc2['error'] . "<p>" and die;
+            }
+
+            if($closeBanc){// TODOOOO}
         }
     }
 
