@@ -9,3 +9,18 @@ function printCollo(id, collo) {
     var cRet = httpXml.responseText;
     return true;
 }
+
+function createCookie(name, value, days) {
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        var expires = "; expires=" + date.toGMTString();
+    }
+    else var expires = "";
+    document.cookie = name + "=" + value + expires + "; path=/";
+}
+
+function setPrinter(value) {
+    createCookie("plprinter", value, 10);
+    return true;
+}

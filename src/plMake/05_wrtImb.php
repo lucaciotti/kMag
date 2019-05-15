@@ -8,7 +8,7 @@
     $collo = getNumeric('collo');
     print("Letti parametri per collo $collo<br>");
     if($collo == 0) {
-        header("location: pl_01_ask.php");
+        header("location: 01_ask.php");
         exit();
     }
     $idRowPl = $_GET['id'];
@@ -48,8 +48,8 @@
     $pesobanc = str_replace(",", ".", $pesobanc);
 
     if( $art != "") {
-        $pbIns = PLUtils::insPBRow($idRowPl, 1, $collo, '', 1, '', $art, $rep, $banc, $altezza, $imb_u_misural, $imb_u_misurah, $imb_u_misuras, $pesocollo);
-        if ($pbIns!='success') print "<p> 01 - C'é un errore: " . $pbIns['error'] . "<p>" and die;
+        $pbInsCollo = PLUtils::insPBRow($idRowPl, 1, $collo, '', 1, '', $art, $rep, $banc, $altezza, $imb_u_misural, $imb_u_misurah, $imb_u_misuras, $pesocollo);
+        if ($pbInsCollo!='success') print "<p> 01 - C'é un errore: " . $pbInsCollo['error'] . "<p>" and die;
 
         if($nColli>1){
             $pbInsCollo2 = PLUtils::insPBRow($idRowPl, 1, $collo2, '', 1, '', $art2, $rep, $banc, $altezza, $imb_u_misural2, $imb_u_misurah2, $imb_u_misuras2, $pesocollo2);
@@ -68,7 +68,10 @@
                 if ($plModUpdBanc2!='success') print "<p> 01 - C'é un errore: " . $plModUpdBanc2['error'] . "<p>" and die;
             }
 
-            if($closeBanc){// TODOOOO}
+            if($closeBanc){
+                $pbInsBanc = PLUtils::insPBRow($idRowPl, 1, 0, '', 1, '', $codBanc, $rep, $banc, $altezza, $pal_u_misural, 0, $pal_u_misuras, $pesobanc);
+                if ($pbInsBanc!='success') print "<p> 01 - C'é un errore: " . $pbInsBanc['error'] . "<p>" and die;
+            }
         }
     }
 

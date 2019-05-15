@@ -176,7 +176,6 @@ class PLUtils {
         return $res;
     }
 
-
     public static function insPBRow($id, $qta=0, $collo, $lotto='', $fatt=0, $um='', $articolo='', $reparto='', $bancale=0, $altezza=0, $misural=0, $misuras=0, $misurah=0, $peso=0, $modify=0){
         self::initialize();
         $data = array(
@@ -388,6 +387,26 @@ class PLUtils {
             }
         }
         return $rep;
+    }
+
+    //STAMPA ETICHETTE
+    public static function insEtichPB($idTesPB, $collo, $prtname, $artcollo='', $desccollo='', $warnpeso=false
+    ){
+        self::initialize();
+        
+        $data = array(
+            "id"         => $idTesPB,
+            "nCollo"     => $collo,
+            "prtname"    => $prtname,
+            "artcollo"   => $artcollo,
+            "desccollo"  => $desccollo,
+            "extracollo" => false,
+            "warnpeso"   => $warnpeso
+        );
+        // var_dump($data);
+        $url = 'plUtils/insertEtich';
+        $res = self::$conn->post($url, $data);
+        return $res;
     }
 
 }
