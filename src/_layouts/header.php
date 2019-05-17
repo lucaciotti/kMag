@@ -10,30 +10,6 @@ session_start();
 include_once($_SERVER['DOCUMENT_ROOT']."/kMag2/config/global_config.php");
 // include($_SERVER['DOCUMENT_ROOT']."/kMag2/config/odbcSocket.php");
 
-//popUp Errori, Warning o Msg generici
-function popupMsg($msg, $type){
-	if($type == "E"){
-
-		echo "<script type='text/javascript'>alert('FATAL ERROR: $msg  Contattare Amministratore! $prevPage');  history.go(-1);</script>";
-		// TODO log
-		// INTERROMPO L?ESECUZIONE DELLA PAGINA
-		//header("location: ".$_SERVER['HTTP_REFERER']); window.location.assign(".$prevPage.")
-	} else {
-		echo "<script type='text/javascript'>alert('WARNING $msg ');</script>";
-	}
-}
-
-function logOut(){
-	if(isset($_SESSION['UserPL'])){
-		print ("<br>\n<a class=\"menu\" href=\"login.php?logOut=yes\"><img noborder src=\"../img/b_drop.png\">LogOut</a>\n");
-	}
-}
-
-function checkPermission(){
-	if(!isset($_SESSION['UserPL'])){
-		Header("Location: login.php?error=1");
-	}
-}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="it">
