@@ -14,8 +14,15 @@ th {
 	border: 1px solid #0000e0
 }
 
-img {
-	border: none
+table.navbar {
+	font-family: verdana, arial, helvetica;
+	font-size: 12pt;
+	border: none;
+	border-collapse: collapse;
+}
+
+td.navbar {
+	border: none;
 }
 
 td.alert {
@@ -31,6 +38,10 @@ tr.error {
 	background: red;
 }
 
+img {
+	border: none
+}
+
 .footmsg {
 	font-size: 8pt;
 }
@@ -44,28 +55,22 @@ tr.error {
 	background: #c0f0c0;
 }
 
-table.detail {
-	font-family: verdana, arial, helvetica;
-	font-size: 12pt;
-	border: 1px solid #0000e0;
+/* table,
+td,
+tr {
+	border-style: none;
 	border-collapse: collapse;
-}
+} */
+
+
 
 input.detail {
 	font-family: verdana, arial, helvetica;
 	font-size: 12pt;
 }
 
-table.navbar {
-	font-family: verdana, arial, helvetica;
-	font-size: 12pt;
-	border: none;
-	border-collapse: collapse;
-}
 
-td.navbar {
-	border: none;
-}
+
 
 a.menu {
 	text-decoration: none;
@@ -88,12 +93,6 @@ body {
 	margin-right: auto;
 }
 
-table,
-td,
-tr {
-	border-style: none;
-	border-collapse: collapse;
-}
 
 /* div { text-align: center; } */
 button {

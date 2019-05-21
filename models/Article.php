@@ -96,4 +96,16 @@ class Article {
 
         return self::$conn->get($url, $queryUrl);
     }
+
+    public static function getAllUbic($codeArt, $columns=null){
+        self::initialize();
+
+        $url = 'artubicaz/';
+        if(!empty($codeArt)) $url = $url.$codeArt;
+        $queryUrl = '';
+        if($columns) $queryUrl = 'col='.$columns;
+
+        return self::$conn->get($url, $queryUrl);
+    }
+
 }
