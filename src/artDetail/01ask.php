@@ -1,5 +1,5 @@
 <?php
-    include($_SERVER['DOCUMENT_ROOT']."/kMag2/src/_layouts/header.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/kMag2/src/_layouts/header.php");
 ?>
 
 <label for="id">Articolo:</label>
@@ -11,5 +11,6 @@
 </form>
 
 <?php
-    include($_SERVER['DOCUMENT_ROOT']."/kMag2/src/_layouts/footer.php");
+goMain();
+include($_SERVER['DOCUMENT_ROOT'] . "/kMag2/src/_layouts/footer.php");
 ?>

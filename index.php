@@ -3,14 +3,15 @@
 
 <head>
     <title>k-Mag</title>
-    <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="assets/css/style.css" type="text/css">
 </head>
 
 <body>
-    <a href="src/menus/main.php"><img src="italia.jpg" height="50" /></a>&nbsp;
-    <h2>Selezionare nazione</h2>
-
+    <center>
+        <a href="src/menus/main.php"><img src="assets/images/ditte/italia.jpg" height="50" /></a>&nbsp;
+        <h2>Selezionare nazione</h2>
+    </center>
     <div class="footmsg">
         <center>
             <hr size="1">
@@ -24,10 +25,11 @@
 </html>
 
 <?php
-    // Calcolo dell'anno corrente
-    function current_year() {
-        // $lt = localtime(time(), true);
-        // return ($lt[tm_year]+1900);
-        return date("Y");
-    }
+// Calcolo dell'anno corrente
+function current_year()
+{
+    // $lt = localtime(time(), true);
+    // return ($lt[tm_year]+1900);
+    return date("Y");
+}
 ?>

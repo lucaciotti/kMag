@@ -1,5 +1,5 @@
 <?php
-    include($_SERVER['DOCUMENT_ROOT']."/kMag2/src/_layouts/header.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/kMag2/src/_layouts/header.php");
 ?>
 
 
@@ -18,31 +18,35 @@
         </ul>
     </span>
 
-    <button onclick="$('span.menu').hide(); $('#ricevMenu').toggle();">Ricevimento Merci</button>
-    <span id='ricevMenu' class='menu'>
-        <ul>
-            <!--li><img src="../bcreader.gif" />&nbsp;<a href="lista.php">Prelievo documenti globale</a></li
-            <li><img src="../bcreader.gif" />&nbsp;<a href="getdoc.php">Prelievo documenti barcode</a></li> -->
-            <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="getfordoc.php">Prelievo documenti barcode</a></li>
-        </ul>
-    </span>
+    <?php if (!isFiliale()) { ?>
+        <button onclick="$('span.menu').hide(); $('#ricevMenu').toggle();">Ricevimento Merci</button>
+        <span id='ricevMenu' class='menu'>
+            <ul>
+                <!--li><img src="../bcreader.gif" />&nbsp;<a href="lista.php">Prelievo documenti globale</a></li
+                            <li><img src="../bcreader.gif" />&nbsp;<a href="getdoc.php">Prelievo documenti barcode</a></li> -->
+                <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="getfordoc.php">Prelievo documenti barcode</a></li>
+            </ul>
+        </span>
+    <?php } ?>
 
-    <button onclick="$('span.menu').hide(); $('#prodMenu').toggle();">Produzione Interna</button>
-    <span id='prodMenu' class='menu'>
-        <ul>
-            <!--li><img src="../bcreader.gif" />&nbsp;<a href="askcd.php">Prelievo da C/Deposito</a></li-->
-            <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="asklp.php">Gestione lista prelievo</a></li>
-            <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="askdb.php">Prelievo componenti da distinta base</a></li>
-            <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="askcp.php">Carico produzione</a></li>
-        </ul>
-    </span>
+    <?php if (!isFiliale()) { ?>
+        <button onclick="$('span.menu').hide(); $('#prodMenu').toggle();">Produzione Interna</button>
+        <span id='prodMenu' class='menu'>
+            <ul>
+                <!--li><img src="../bcreader.gif" />&nbsp;<a href="askcd.php">Prelievo da C/Deposito</a></li-->
+                <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="asklp.php">Gestione lista prelievo</a></li>
+                <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="askdb.php">Prelievo componenti da distinta base</a></li>
+                <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="askcp.php">Carico produzione</a></li>
+            </ul>
+        </span>
+    <?php } ?>
 
     <button class="pc" onclick="$('span.menu').hide(); $('#makePlMenu').toggle();">Packing List</button>
     <span id='makePlMenu' class='menu'>
         <ul>
             <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="../plMake/01_ask.php">Gestione packing list</a></li>
-            <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="reprint-pl.php">Ristampa etichette colli</a></li>
-            <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="reprint-banc.php">Ristampa etichette bancali</a></li>
+            <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="../plEtich/01reprintCollo.php">Ristampa etichette colli</a></li>
+            <li><img src="../../assets/images/bcreader.gif" />&nbsp;<a href="../plEtich/01reprintBanc.php">Ristampa etichette bancali</a></li>
         </ul>
     </span>
 
@@ -57,19 +61,19 @@
     <hr />
 
     <ul>
-        <?php if(!isMobile()){ ?>
-            <li><strong><img src="../../assets/images/b_props.gif" />&nbsp;<a href="index-pc.php">Funzioni per PC</a></strong></li>
+        <?php if (!isMobile()) { ?>
+            <li><strong><img src="../../assets/images/b_props.gif" />&nbsp;<a href="menu_pc.php">Funzioni per PC</a></strong></li>
         <?php } ?>
-        <li><strong><img src="../../assets/images/b_props.gif" />&nbsp;<a href="index-util.php">Utility</a></strong></li>
+        <li><strong><img src="../../assets/images/b_props.gif" />&nbsp;<a href="utils.php">Utility</a></strong></li>
     </ul>
-        <!--
-        <li><img src="../bcreader.gif" />&nbsp;<a href="start.php">Prelievo documenti nominativo</a></li>
-        <li><img src="../bcreader.gif" /><a href="listaart.php">Prelievo per articolo</a></li>
-        <li><img src="../bcreader.gif" /><a href="start_rep.php">Prelievo per reparto</a></li>
-        -->
+    <!--
+                <li><img src="../bcreader.gif" />&nbsp;<a href="start.php">Prelievo documenti nominativo</a></li>
+                <li><img src="../bcreader.gif" /><a href="listaart.php">Prelievo per articolo</a></li>
+                <li><img src="../bcreader.gif" /><a href="start_rep.php">Prelievo per reparto</a></li>
+                -->
 
 </div>
 
 <?php
-    include($_SERVER['DOCUMENT_ROOT']."/kMag2/src/_layouts/footer.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/kMag2/src/_layouts/footer.php");
 ?>

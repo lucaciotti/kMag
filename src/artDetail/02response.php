@@ -1,16 +1,16 @@
 <?php
-    include($_SERVER['DOCUMENT_ROOT']."/kMag2/src/_layouts/header.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/kMag2/src/_layouts/header.php");
 
-    include($_SERVER['DOCUMENT_ROOT']."/kMag2/models/Article.php");
-    $codeArt = strtoupper($_GET['articolo']);
-    $errMessage = "";
+include($_SERVER['DOCUMENT_ROOT'] . "/kMag2/models/Article.php");
+$codeArt = strtoupper($_GET['articolo']);
+$errMessage = "";
 
-    $anno = current_year();
-    $artget = Article::getArticle($codeArt, 'codice,descrizion,ubicaz');    
-    $artUbiGet = Article::getAllUbic($codeArt);
-    $giacget = Article::getGiacArt($codeArt, $anno, true);
-    // var_dump($artUbiGet);
-    //print($artget['data'][0]['descrizion']);
+$anno = current_year();
+$artget = Article::getArticle($codeArt, 'codice,descrizion,ubicazione');
+$artUbiGet = Article::getAllUbic($codeArt);
+$giacget = Article::getGiacArt($codeArt, $anno, true);
+// var_dump($artUbiGet);
+//print($artget['data'][0]['descrizion']);
 ?>
 <h2><?php echo $codeArt ?></h2>
 <h3><?php echo $artget['data'][0]['descrizion'] ?></h3>
@@ -29,13 +29,13 @@
     </tr>
 
     <?php foreach ($giacget['data'] as $giac) { ?>
-    	<tr>
-            <td><?php echo $giac['magazzino']?></td>
+        <tr>
+            <td><?php echo $giac['magazzino'] ?></td>
             <td><?php echo $giac['magdesc'] ?></td>
             <td align='right'><?php echo $giac['esistenza'] ?> <?php echo $giac['unmisura'] ?></td>
-            <td align='right'><?php echo $giac['esistenza']+$giac['ordinato']-$giac['impegnato'] ?> <?php echo $giac['unmisura'] ?></td>
+            <td align='right'><?php echo $giac['esistenza'] + $giac['ordinato'] - $giac['impegnato'] ?> <?php echo $giac['unmisura'] ?></td>
             <!-- <td></td> -->
-	    </tr>
+        </tr>
     <?php } ?>
 </table>
 
@@ -50,16 +50,17 @@
         <th colspan='2'>Altre Ubicazioni</th>
     </tr>
     <?php foreach ($artUbiGet['data'] as $ubi) { ?>
-    	<tr>
-            <td><?php echo $ubi['ubicazione']?></td>
+        <tr>
+            <td><?php echo $ubi['ubicazione'] ?></td>
             <td><?php echo $ubi['descrubi'] ?></td>
-	    </tr>
+        </tr>
     <?php } ?>
 </table>
 
-<br/>
+<br />
 <a href="./01ask.php">Altra ricerca</a>
- 
+
 <?php
-    include($_SERVER['DOCUMENT_ROOT']."/kMag2/src/_layouts/footer.php");
+goMain();
+include($_SERVER['DOCUMENT_ROOT'] . "/kMag2/src/_layouts/footer.php");
 ?>

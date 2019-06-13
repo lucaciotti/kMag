@@ -139,7 +139,8 @@ function checkCollo(obj) {
     }
     //Controllo collo sia disponibile
     {
-        var url = window.basePATH + "plColloGetByNcollo.php?id=" + idpl + "&collo=" + collo;
+        var url =
+            window.basePATH + "plColloGetByNcollo.php?id=" + idpl + "&collo=" + collo;
         var milliseconds = new Date().getTime();
         url += "&x=" + milliseconds;
         makeHttpXml();
@@ -177,7 +178,13 @@ function checkCollo(obj) {
     //Controllo che in caso di doppio collo sia libero il collo+1
     {
         if (nColli > 1) {
-            var url = window.basePATH + "plColloGetByNcollo.php?id=" + idpl + "&collo=" + collo + 1;
+            var url =
+                window.basePATH +
+                "plColloGetByNcollo.php?id=" +
+                idpl +
+                "&collo=" +
+                collo +
+                1;
             var milliseconds = new Date().getTime();
             url += "&x=" + milliseconds;
             makeHttpXml();
@@ -190,9 +197,7 @@ function checkCollo(obj) {
                 console.log("Secondo collo disponibile e non prenotato", colloReserved);
             } else if (cRet != termid) {
                 //collo prenotato da altro utente
-                alert(
-                    "Attenzione Problema a prenotare Secondo Collo...Riprovare"
-                );
+                alert("Attenzione Problema a prenotare Secondo Collo...Riprovare");
                 return false;
             } else {
                 // già prenotato da me
@@ -233,7 +238,8 @@ function checkCollo(obj) {
             "&termid=" +
             termid +
             "&collo=" +
-            collo + 1;
+            collo +
+            1;
         var milliseconds = new Date().getTime();
         url += "&x=" + milliseconds;
         //alert(url);
@@ -277,7 +283,8 @@ function checkCollo(obj) {
             "&termid=" +
             termid +
             "&collo=" +
-            collo + 1;
+            collo +
+            1;
         var milliseconds = new Date().getTime();
         url += "&x=" + milliseconds;
         //alert(url);
@@ -295,16 +302,30 @@ function checkCollo(obj) {
 
 function checkRespForm() {
     var check = true;
-    var lotto = $("#lotto").val().trim();
+    var lotto = $("#lotto")
+        .val()
+        .trim();
     //controllo che sia stato sparato il codice a barre dell'articolo
-    if ($("#lottoobb").text().trim() == "Obbligatorio" && $("#controllo").val().trim() == "") {
+    if (
+        $("#lottoobb")
+            .text()
+            .trim() == "Obbligatorio" &&
+        $("#controllo")
+            .val()
+            .trim() == ""
+    ) {
         alert("Controllo Articolo OBBLIGATORIO!");
         $("#controllo").val("");
         $("#controllo").focus();
         return false;
     }
     //controllo che sia stato sparato il codice lotto
-    if ($("#lottoobb").text().trim() == "Obbligatorio" && lotto == "") {
+    if (
+        $("#lottoobb")
+            .text()
+            .trim() == "Obbligatorio" &&
+        lotto == ""
+    ) {
         alert("Lotto OBBLIGATORIO");
         $("#lotto").val("");
         $("#lotto").focus();
@@ -326,17 +347,17 @@ function checkRespForm() {
 }
 
 function recapRespForm() {
-    var qta = $('#qta').val();
-    var qtaRes = $('#qtaRes').val();
-    var oldFatt = $('#fattDoc').val();
+    var qta = $("#qta").val();
+    var qtaRes = $("#qtaRes").val();
+    var oldFatt = $("#fattDoc").val();
     var umBox = document.getElementById("um");
     var newFatt = umBox.options[umBox.selectedIndex].value;
-    var collo = parseInt($('#collo').val());
-    var lotto = new String($('#lotto').val());
-    var umOld = new String($('#umDoc').val());
+    var collo = parseInt($("#collo").val());
+    var lotto = new String($("#lotto").val());
+    var umOld = new String($("#umDoc").val());
     var umNew = new String(umBox.options[umBox.selectedIndex].innerHTML);
-    var close = ($("#close").is(":checked") ? "\n*Collo Chiuso" : "");
-    var stampo = ($("#print").is(":checked") ? "\n*Stampo Collo" : "");
+    var close = $("#close").is(":checked") ? "\n*Collo Chiuso" : "";
+    var stampo = $("#print").is(":checked") ? "\n*Stampo Collo" : "";
 
     var message = "Collo n." + collo + "\nArt: " + codArt + "\n";
     if (lotto.trim() != "") {
@@ -345,8 +366,21 @@ function recapRespForm() {
     if (umOld.trim() == umNew.trim() || oldFatt == 0) {
         message = message + "Qta: " + qta + " " + umNew + "" + close + "" + stampo;
     } else {
-        var qta2 = qta * newFatt / oldFatt;
-        message = message + "Qta: " + qta + " " + umNew + "  ==>  " + qta2 + " " + umOld + "" + close + "" + stampo;
+        var qta2 = (qta * newFatt) / oldFatt;
+        message =
+            message +
+            "Qta: " +
+            qta +
+            " " +
+            umNew +
+            "  ==>  " +
+            qta2 +
+            " " +
+            umOld +
+            "" +
+            close +
+            "" +
+            stampo;
     }
     message = message + "\nPROCEDO?";
     var r = confirm(message);
@@ -359,7 +393,7 @@ function recapRespForm() {
 }
 
 function chkColloPann_click() {
-    if ($("#chkColloPann").is(':checked')) {
+    if ($("#chkColloPann").is(":checked")) {
         $("#colloPann").text($("#colloPann").text() - 1);
         $("#ncolli").val(1);
     } else {
@@ -371,12 +405,13 @@ function chkColloPann_click() {
 // SEZIONE IMBALLI
 function decodeImb(obj, isSecondo = false) {
     var val = cleanCode(obj.value.trim().toUpperCase());
-    var colloDoppio = (isSecondo ? '' : '2');
+    var colloDoppio = isSecondo ? "" : "2";
     if (val != "") {
         var oArt = checkCodiceArtix(val);
         var codImb = String(oArt.codice).trim();
-        var isImballo = oArt.xml.getElementsByTagName("imballo")[0].firstChild.nodeValue;
-        if (codImb != '' && isImballo == 0) {
+        var isImballo = oArt.xml.getElementsByTagName("imballo")[0].firstChild
+            .nodeValue;
+        if (codImb != "" && isImballo == 0) {
             alert("L'articolo non &egrave; un imballo.");
             obj.value = "";
             obj.focus();
@@ -385,7 +420,8 @@ function decodeImb(obj, isSecondo = false) {
                 setMisuraImb(checkCodiceArtix($("#artcollo").val()), colloDoppio);
             } else {
                 var oRiga = getRigaDocx($("#id").val() * 1);
-                var artPL = oRiga.getElementsByTagName("codicearti")[0].firstChild.nodeValue;
+                var artPL = oRiga.getElementsByTagName("codicearti")[0].firstChild
+                    .nodeValue;
                 setMisuraImb(checkCodiceArtix(artPL), colloDoppio);
             }
         } else {
@@ -396,19 +432,35 @@ function decodeImb(obj, isSecondo = false) {
     //SE FILIALE INSERISCO SEMPRE PESO - ALTRIMENTI SOLO SE FASCIO
     if ($("#isFiliale").val()) {
         if (isSecondo) {
-            var peso = getPesoCollo($("#id_pl").val(), $("#id").val(), (($('#collo').val() * 1) + 1));
+            var peso = getPesoCollo(
+                $("#id_pl").val(),
+                $("#id").val(),
+                $("#collo").val() * 1 + 1
+            );
             $("#pesocollo2").val(peso);
         } else {
-            var peso = getPesoCollo($("#id_pl").val(), $("#id").val(), $('#collo').val());
+            var peso = getPesoCollo(
+                $("#id_pl").val(),
+                $("#id").val(),
+                $("#collo").val()
+            );
             $("#pesocollo").val(peso);
         }
     } else {
         if (codImb == "#KZ-SCG(009)") {
             if (isSecondo) {
-                var peso = getPesoCollo($("#id_pl").val(), $("#id").val(), (($('#collo').val() * 1) + 1));
+                var peso = getPesoCollo(
+                    $("#id_pl").val(),
+                    $("#id").val(),
+                    $("#collo").val() * 1 + 1
+                );
                 $("#pesocollo2").val(peso);
             } else {
-                var peso = getPesoCollo($("#id_pl").val(), $("#id").val(), $('#collo').val());
+                var peso = getPesoCollo(
+                    $("#id_pl").val(),
+                    $("#id").val(),
+                    $("#collo").val()
+                );
                 $("#pesocollo").val(peso);
             }
         }
@@ -419,9 +471,17 @@ function decodeImb(obj, isSecondo = false) {
 
 function chkPesoCollo(obj, isSecondo = false) {
     if (isSecondo) {
-        var peso = getPesoCollo($("#id_pl").val(), $("#id").val(), (($('#collo').val() * 1) + 1));
+        var peso = getPesoCollo(
+            $("#id_pl").val(),
+            $("#id").val(),
+            $("#collo").val() * 1 + 1
+        );
     } else {
-        var peso = getPesoCollo($("#id_pl").val(), $("#id").val(), $('#collo').val());
+        var peso = getPesoCollo(
+            $("#id_pl").val(),
+            $("#id").val(),
+            $("#collo").val()
+        );
     }
     if (obj.value < peso) {
         alert("Attenzione:\nPeso inferiore al peso netto");
@@ -454,7 +514,13 @@ function checkBanc(reserve, close, quiet = true) {
 
     //Contr ollo bancale sia disponibile
     {
-        var url = window.basePATH + "plBancGetByRep.php?id=" + idpl + "&rep=" + rep + noCache();
+        var url =
+            window.basePATH +
+            "plBancGetByRep.php?id=" +
+            idpl +
+            "&rep=" +
+            rep +
+            noCache();
         makeHttpXml();
         httpXml.open("GET", url, false);
         httpXml.send(null);
@@ -492,7 +558,8 @@ function checkBanc(reserve, close, quiet = true) {
             "&rep=" +
             rep +
             "&banc=" +
-            nBanc + noCache();
+            nBanc +
+            noCache();
         makeHttpXml();
         httpXml.open("GET", url, false);
         httpXml.send(null);
@@ -513,7 +580,8 @@ function checkBanc(reserve, close, quiet = true) {
             "&rep=" +
             rep +
             "&banc=" +
-            nBanc + noCache();
+            nBanc +
+            noCache();
         makeHttpXml();
         httpXml.open("GET", url, false);
         httpXml.send(null);
@@ -543,31 +611,53 @@ function decodeBanc(obj) {
         return;
     }
     var oArt = checkCodiceArtix(val);
-    $("#pal_u_misural").val(oArt.xml.getElementsByTagName("u_misural")[0].firstChild.nodeValue);
-    $("#pal_u_misuras").val(oArt.xml.getElementsByTagName("u_misuras")[0].firstChild.nodeValue);
+    $("#pal_u_misural").val(
+        oArt.xml.getElementsByTagName("u_misural")[0].firstChild.nodeValue
+    );
+    $("#pal_u_misuras").val(
+        oArt.xml.getElementsByTagName("u_misuras")[0].firstChild.nodeValue
+    );
 
-     //SE FILIALE INSERISCO SEMPRE PESO - ALTRIMENTI SOLO SE FASCIO
-     if ($("#isFiliale").val()) {
-             var pesoColli = getPesoBanc($("#id_pl").val(), $("#id").val(), $('#bancnum').val(), 'lordo');
-             var pesoThisCollo = $("#pesocollo").val();
-             var pesoNetBanc = oArt.xml.getElementsByTagName("pesounit")[0].firstChild.nodeValue;
-             var peso = pesoColli + pesoThisCollo + pesoNetBanc;
-             $("#pesobanc").val(peso);
-     } else {
-         if (codImb == "#KZ-SCG(009)") {
-             var pesoColli = getPesoBanc($("#id_pl").val(), $("#id").val(), $('#bancnum').val(), 'lordo');
-             var pesoThisCollo = $("#pesocollo").val();
-             var pesoNetBanc = oArt.xml.getElementsByTagName("pesounit")[0].firstChild.nodeValue;
-             var peso = pesoColli + pesoThisCollo + pesoNetBanc;
-             $("#pesobanc").val(peso);
-         }
-     }
+    //SE FILIALE INSERISCO SEMPRE PESO - ALTRIMENTI SOLO SE FASCIO
+    if ($("#isFiliale").val()) {
+        var pesoColli = getPesoBanc(
+            $("#id_pl").val(),
+            $("#id").val(),
+            $("#bancnum").val(),
+            "lordo"
+        );
+        var pesoThisCollo = $("#pesocollo").val();
+        var pesoNetBanc = oArt.xml.getElementsByTagName("pesounit")[0].firstChild
+            .nodeValue;
+        var peso = pesoColli + pesoThisCollo + pesoNetBanc;
+        $("#pesobanc").val(peso);
+    } else {
+        if (codImb == "#KZ-SCG(009)") {
+            var pesoColli = getPesoBanc(
+                $("#id_pl").val(),
+                $("#id").val(),
+                $("#bancnum").val(),
+                "lordo"
+            );
+            var pesoThisCollo = $("#pesocollo").val();
+            var pesoNetBanc = oArt.xml.getElementsByTagName("pesounit")[0].firstChild
+                .nodeValue;
+            var peso = pesoColli + pesoThisCollo + pesoNetBanc;
+            $("#pesobanc").val(peso);
+        }
+    }
 }
 
 function chkPesoBanc(obj) {
-    var pesoColli = getPesoBanc($("#id_pl").val(), $("#id").val(), $('#bancnum').val(), 'lordo');
+    var pesoColli = getPesoBanc(
+        $("#id_pl").val(),
+        $("#id").val(),
+        $("#bancnum").val(),
+        "lordo"
+    );
     var pesoThisCollo = $("#pesocollo").val();
-    var pesoNetBanc = oArt.xml.getElementsByTagName("pesounit")[0].firstChild.nodeValue;
+    var pesoNetBanc = oArt.xml.getElementsByTagName("pesounit")[0].firstChild
+        .nodeValue;
     var peso = pesoColli + pesoThisCollo + pesoNetBanc;
     if (obj.value < peso) {
         alert("Attenzione:\nPeso inferiore al peso netto");
@@ -575,9 +665,9 @@ function chkPesoBanc(obj) {
     if (obj.value > peso * 1.1) {
         alert("Attenzione:\nDifferenza con il peso teorico\nsuperiore al 10%");
     }
-};
+}
 
-function checkImbForm(){
+function checkImbForm() {
     var codImb = $("#art").val();
     if (codImb == "") {
         alert("Specificare l'imballo");
@@ -585,13 +675,20 @@ function checkImbForm(){
         return false;
     }
     if ($("#hasbanc").is(":checked")) {
-        if ($("#closebanc").is(":checked") && $("#codbanc option:selected").val() == "NONE") {
+        if (
+            $("#closebanc").is(":checked") &&
+            $("#codbanc option:selected").val() == "NONE"
+        ) {
             alert("L'articolo non e' un bancale.");
             $("#codbanc").focus();
             return false;
         }
-        if ($("#closebanc").is(":checked") && 
-            ($("#pal_u_misural").val() == 0 || $("#pal_u_misuras").val() == 0 || $("#altezza").val() == 0)) {
+        if (
+            $("#closebanc").is(":checked") &&
+            ($("#pal_u_misural").val() == 0 ||
+                $("#pal_u_misuras").val() == 0 ||
+                $("#altezza").val() == 0)
+        ) {
             alert("Una o piu' misure pallet mancanti");
             $("#altezza").focus();
             return false;
@@ -601,8 +698,12 @@ function checkImbForm(){
             $("#pesobanc").focus();
             return false;
         }
-    } 
-    if ($("#imb_u_misural").val() == 0 || $("#imb_u_misurah").val() == 0 || $("#imb_u_misuras").val() == 0) {
+    }
+    if (
+        $("#imb_u_misural").val() == 0 ||
+        $("#imb_u_misurah").val() == 0 ||
+        $("#imb_u_misuras").val() == 0
+    ) {
         alert("Una o piu' misure imballo mancanti");
         $("#imb_u_misural").focus();
         return false;
@@ -621,7 +722,11 @@ function checkImbForm(){
             $("#art2").focus();
             return false;
         }
-        if ($("#imb_u_misural2").val() == 0 || $("#imb_u_misurah2").val() == 0 || $("#imb_u_misuras2").val() == 0) {
+        if (
+            $("#imb_u_misural2").val() == 0 ||
+            $("#imb_u_misurah2").val() == 0 ||
+            $("#imb_u_misuras2").val() == 0
+        ) {
             alert("Una o piu' misure imballo del secondo collo mancanti");
             $("#imb_u_misural2").focus();
             return false;
@@ -642,19 +747,25 @@ function checkImbForm(){
 // UTILITY IMBALLO
 
 function setMisuraImb(oArt, collo) {
-    $("#imb_u_misural" + collo).val(oArt.xml.getElementsByTagName("u_misural")[0].firstChild.nodeValue);
-    $("#imb_u_misurah" + collo).val(oArt.xml.getElementsByTagName("u_misurah")[0].firstChild.nodeValue);
-    $("#imb_u_misuras" + collo).val(oArt.xml.getElementsByTagName("u_misuras")[0].firstChild.nodeValue);
-};
+    $("#imb_u_misural" + collo).val(
+        oArt.xml.getElementsByTagName("u_misural")[0].firstChild.nodeValue
+    );
+    $("#imb_u_misurah" + collo).val(
+        oArt.xml.getElementsByTagName("u_misurah")[0].firstChild.nodeValue
+    );
+    $("#imb_u_misuras" + collo).val(
+        oArt.xml.getElementsByTagName("u_misuras")[0].firstChild.nodeValue
+    );
+}
 
 function copiaVal(orig, dest) {
     if ($("#art").val() == "#KZ-SCG(009)") {
         dest.val(orig.val());
     }
-};
+}
 
 function getRigaDocx(cId) {
-    var url = window.basePATH + 'docRigGet.php?cod=' + encodeURIComponent(cId);
+    var url = window.basePATH + "docRigGet.php?cod=" + encodeURIComponent(cId);
     var milliseconds = new Date().getTime();
     url += "&x=" + milliseconds;
     makeHttpXml();
@@ -664,7 +775,15 @@ function getRigaDocx(cId) {
 }
 
 function getPesoCollo(idTespl, idRowPl, nCollo) {
-    var url = window.basePATH + "plPesoColloGet.php?idTesPl=" + idTespl + "&idRowPl=" + idRowPl + "&collo=" + nCollo + noCache();
+    var url =
+        window.basePATH +
+        "plPesoColloGet.php?idTesPl=" +
+        idTespl +
+        "&idRowPl=" +
+        idRowPl +
+        "&collo=" +
+        nCollo +
+        noCache();
     makeHttpXml();
     httpXml.open("GET", url, false);
     httpXml.send(null);
@@ -672,22 +791,22 @@ function getPesoCollo(idTespl, idRowPl, nCollo) {
 }
 
 function getPesoBanc(idTespl, idRowPl, nBanc, mode) {
-    var url = window.basePATH + "plPesoColloGet.php?idTesPl=" + idTespl + "&idRowPl=" + idRowPl + "&banc=" + nBanc + "&mode=" + mode + noCache();
+    var url =
+        window.basePATH +
+        "plPesoColloGet.php?idTesPl=" +
+        idTespl +
+        "&idRowPl=" +
+        idRowPl +
+        "&banc=" +
+        nBanc +
+        "&mode=" +
+        mode +
+        noCache();
     makeHttpXml();
     httpXml.open("GET", url, false);
     httpXml.send(null);
     return httpXml.responseText;
 }
-
-
-
-
-
-
-
-
-
-
 
 // switch (cRet) {
 //     case x:

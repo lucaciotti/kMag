@@ -264,11 +264,11 @@ class PLUtils {
             $url = $url.'/'.$nBanc;
         }
         $res = self::$conn->get($url, null);
-        return res;
+        return $res;
     }
 
     // RESTITUISCE RIGHE CREATE IN PB - preformattate per calcolo pesi
-    public static function getPBRows($idPbTes, $nCollo=-1, $nBanc=null){
+    public static function getPBRows($idPbTes, $nCollo=-1, $nBanc=null, $onlyCollo=false){
         // se nCollo = -1 restituisce tutte le righe (se nBanc filtra righe bancale)
         // se nCollo = 0 resituisce tutti le righe bancale (se nBanc solo riga bancale)
         self::initialize();
@@ -276,8 +276,28 @@ class PLUtils {
         if($nBanc){
             $url = $url.'/'.$nBanc;
         }
+        if($onlyCollo){
+            $url = $url . '?onlyCollo=1';
+        }
         $res = self::$conn->get($url, null);
-        return res;
+        return $res;
+    }
+
+    // RESTITUISCE Lista Numero Colli IN PB
+    public static function getListColliPB($idPbTes)
+    {
+        self::initialize();
+        $url = 'plUtils/getListColliPB/' . $idPbTes;
+        $res = self::$conn->get($url, null);
+        return $res;
+    }
+    // RESTITUISCE Lista Numero Bancali IN PB
+    public static function getListBancPB($idPbTes)
+    {
+        self::initialize();
+        $url = 'plUtils/getListBancPB/' . $idPbTes;
+        $res = self::$conn->get($url, null);
+        return $res;
     }
 
     // FUNZIONI PER IL CALCOLO DEL PESO NELLE PL
