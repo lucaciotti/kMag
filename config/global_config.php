@@ -3,7 +3,7 @@
 class CONFIG {
     private static $initialized;
     //Preconfigurato su SPAGNA
-    public static $SERVER_IP = '172.16.2.';
+    public static $SERVER_IP = '172.16.2.102';
     public static $SERVER_PORT = '3018';
     public static $API_VERSION = 'v1';
 
