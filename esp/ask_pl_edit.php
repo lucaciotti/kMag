@@ -1,21 +1,13 @@
 <?php
 
 /************************************************************************/
-
 /* Project ArcaWeb                               		        		*/
-
 /* ===========================                                          */
-
-/*                                                                      */
-
 /* Copyright (c) 2003-2014 by Roberto Ceccarelli                        */
-
-/*                                                                      */
-
 /************************************************************************/
 
 include ("header.php");
-head_jquery_pc("Modifica PL / OC", '');
+head_jquery_pc("Modifica PL/OC", '');
 disableCR();
 
 checkPermission();

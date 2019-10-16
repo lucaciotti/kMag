@@ -84,7 +84,7 @@ label {
 	width: 100px;
 }
 
-body {
+html body {
 	font-family: verdana, arial, helvetica;
 	font-size: 11pt;
 	background: #f0f0f0;
@@ -93,6 +93,12 @@ body {
 	margin-right: auto;
 }
 
+html.lt-ie9 body {
+	font-family: verdana, arial, helvetica;
+	font-size: 11pt;
+	background: #f0f0f0;
+	width: 300px;
+}
 
 /* div { text-align: center; } */
 button {

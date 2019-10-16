@@ -1,4 +1,5 @@
 var decode = function(obj, elm) {
+    alert(obj.value);
     if (obj.value == "") return;
     obj.value = checkCodiceArti(obj.value);
     var tbox = document.getElementById(elm);

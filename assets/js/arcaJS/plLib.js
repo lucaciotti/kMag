@@ -403,7 +403,7 @@ function chkColloPann_click() {
 }
 
 // SEZIONE IMBALLI
-function decodeImb(obj, isSecondo = false) {
+function decodeImb(obj, isSecondo) {
     var val = cleanCode(obj.value.trim().toUpperCase());
     var colloDoppio = isSecondo ? "" : "2";
     if (val != "") {
@@ -469,7 +469,7 @@ function decodeImb(obj, isSecondo = false) {
     obj.value = codImb;
 }
 
-function chkPesoCollo(obj, isSecondo = false) {
+function chkPesoCollo(obj, isSecondo) {
     if (isSecondo) {
         var peso = getPesoCollo(
             $("#id_pl").val(),
@@ -501,7 +501,7 @@ function clickBancale() {
     }
 }
 
-function checkBanc(reserve, close, quiet = true) {
+function checkBanc(reserve, close, quiet) {
     soloNumeri("bancnum");
     var nBanc = $("#bancnum").val();
     if (nBanc == 0) {

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "devSync": "node _dev-tools/devRsync.js",
-    "watchDev": "node _dev-tools/watchProjectDev.js"
+    "watchDev": "node _dev-tools/watchProjectDev.js",
+    "espSync": "node _dev-tools/espRsync.js"
   },
   "repository": {
     "type": "git",
