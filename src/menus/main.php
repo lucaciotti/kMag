@@ -4,8 +4,8 @@ include($_SERVER['DOCUMENT_ROOT'] . "/kMag2/src/_layouts/header.php");
 
 
 <center>
-    <img src="../../assets/images/logo.jpg" />
-    <br />&nbsp;<br />
+    <!-- <img src="../../assets/images/logo.jpg" />
+    <br />&nbsp;<br /> -->
     <h2>Elenco Funzioni per Pistole</h2>
 </center>
 
@@ -62,7 +62,8 @@ include($_SERVER['DOCUMENT_ROOT'] . "/kMag2/src/_layouts/header.php");
 
     <ul>
         <?php if (!isMobile()) { ?>
-            <li><strong><img src="../../assets/images/b_props.gif" />&nbsp;<a href="menu_pc.php">Funzioni per PC</a></strong></li>
+            <!-- <li><strong><img src="../../assets/images/b_props.gif" />&nbsp;<a href="menu_pc.php">Funzioni per PC</a></strong></li> -->
+            <li><strong><img src="../../assets/images/b_props.gif" />&nbsp;<a href="http://172.26.0.101/esp/index-pc.php">Funzioni per PC</a></strong></li>
         <?php } ?>
         <li><strong><img src="../../assets/images/b_props.gif" />&nbsp;<a href="utils.php">Utility</a></strong></li>
     </ul>

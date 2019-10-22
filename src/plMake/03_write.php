@@ -8,7 +8,7 @@
 
     $anno = current_year();
     $id = $_POST['id'];
-    $id_pl = $_POST['id_pl'];
+    $idtesta = $_POST['idtesta'];
     $qta = $_POST['qta'];
     $collo = ($_POST['collo'] == "" ? 0 : $_POST['collo']);
     $lotto = trim($_POST['lotto']);
@@ -42,40 +42,47 @@
     }
     
     $qtaRes = $plGet['data'][0]['quantitare'];
+    
+    if($qtaRes>=$qta){
+        $pbIns = PLUtils::insPBRow($id, $qta, $collo, $lotto, $fatt, $um, '', '', 0, 0, 0, 0, 0, 0, 0);
+        if ($pbIns!='success') print "<p> 01 - C'é un errore: " . $pbIns['error'] . "<p>" and die;
 
-    $pbIns = PLUtils::insPBRow($id, $qta, $collo, $lotto, $fatt, $um, '', '', 0, 0, 0, 0, 0, 0, 0);
-    if ($pbIns!='success') print "<p> 01 - C'é un errore: " . $pbIns['error'] . "<p>" and die;
-
-    if(!empty($artCollo)){
-        $collo2 = ($nColli>1) ? $collo+1 : $collo;
-        print("Inserimento secondo collo<br>");
-        $pbInsCollo2 = PLUtils::insPBRow($id, $qta, $collo2, $lotto, $fatt, $um, $artCollo, '', 0, 0, 0, 0, 0, 0, 0);
-        if ($pbInsCollo2!='success') print "<p> 01 - C'é un errore: " . $pbInsCollo2['error'] . "<p>" and die;
-    }
-
-    $pbRotella = PLUtils::addRotellaRows($plGet['data'][0]['riffromr'], $id, $qta, $collo);
-
-    if($lotto != "") {
-        $ocMod = PLUtils::insOCRow($plGet['data'][0]['riffromr'], $qta, $lotto);
-        if ($ocMod!='success') print "<p> 01 - C'é un errore: " . $ocMod['error'] . "<p>" and die;
-    }
-
-    if($close == 1) {
-        //Nel dubbio chiudo tutto
-        $chiudiCollo = PLUtils::chiudiCollo($id_pl, $termid, $collo);
-        if ($chiudiCollo!='success') print "<p> 01 - C'é un errore: " . $chiudiCollo['error'] . "<p>" and die;
-        if($nColli>1){
-            $chiudiCollo = PLUtils::chiudiCollo($id_pl, $termid, $collo+1);
-            if ($chiudiCollo!='success') print "<p> 01 - C'é un errore: " . $chiudiCollo['error'] . "<p>" and die;
+        if(!empty($artCollo)){
+            $collo2 = ($nColli>1) ? $collo+1 : $collo;
+            print("Inserimento secondo collo<br>");
+            $pbInsCollo2 = PLUtils::insPBRow($id, $qta, $collo2, $lotto, $fatt, $um, $artCollo, '', 0, 0, 0, 0, 0, 0, 0);
+            if ($pbInsCollo2!='success') print "<p> 01 - C'é un errore: " . $pbInsCollo2['error'] . "<p>" and die;
         }
 
-        header("location: 04_imb.php?id_pl=$id_pl&id=$id&collo=$collo&prt=$prt&ncolli=$nColli&artcollo=$artCollo&descollo=$desCollo");
-        exit();
-    }
+        $pbRotella = PLUtils::addRotellaRows($plGet['data'][0]['riffromr'], $id, $qta, $collo);
+
+        if($lotto != "") {
+            $ocMod = PLUtils::insOCRow($plGet['data'][0]['riffromr'], $qta, $lotto);
+            if ($ocMod!='success') print "<p> 01 - C'é un errore: " . $ocMod['error'] . "<p>" and die;
+        }
+
+        $plRes = PLUtils::updQtaResPl($id, $qtaRes-$qta);
+        if ($plRes != 'success') print "<p> 01 - C'é un errore: " . $plRes['error'] . "<p>" and die;
+
+        if($close == 1) {
+            //Nel dubbio chiudo tutto
+            $chiudiCollo = PLUtils::chiudiCollo($idtesta, $termid, $collo);
+            if ($chiudiCollo!='success') print "<p> 01 - C'é un errore: " . $chiudiCollo['error'] . "<p>" and die;
+            if($nColli>1){
+                $chiudiCollo = PLUtils::chiudiCollo($idtesta, $termid, $collo+1);
+                if ($chiudiCollo!='success') print "<p> 01 - C'é un errore: " . $chiudiCollo['error'] . "<p>" and die;
+            }
+
+            header("location: 04_imb.php?id_pl=$idtesta&id=$id&collo=$collo&prt=$prt&ncolli=$nColli&artcollo=$artCollo&descollo=$desCollo");
+            exit();
+        }
 
 
-    if($prt > 0 && $close==0) {
-        header("location: 06_selPrt.php?id=$id_pl&id_riga=$id&collo=$collo&ncolli=$nColli&artcollo=$artCollo&descollo=$desCollo");
+        if($prt > 0 && $close==0) {
+            header("location: 06_selPrt.php?id=$idtesta&id_riga=$id&collo=$collo&ncolli=$nColli&artcollo=$artCollo&descollo=$desCollo");
+        } else {
+            header("location: 01_ask.php");
+        }
     } else {
-        header("location: 01_ask.php");
+        header("Location: error.php?errMessage=" . htmlentities('Qta Maggiore di Qta Residua'));
     }

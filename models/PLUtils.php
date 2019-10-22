@@ -166,7 +166,7 @@ class PLUtils {
         self::initialize();
 
         $data = array(
-            "idRowPl"   => $idRowPl,
+            "idRowPl"   => $idRowPL,
             "collo"     => $nCollo,
             "banc"      => $nBanc
         );
@@ -214,11 +214,11 @@ class PLUtils {
         return $res;
     }
 
-    public static function updQtaResPl($ip, $qta){
+    public static function updQtaResPl($idRowPL, $qta){
         self::initialize();
 
         $data = array(
-            "id"        => $idtesta,
+            "id"        => $idRowPL,
             "qta"    => $qta
         );
         // var_dump($data);

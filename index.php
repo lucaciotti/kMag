@@ -9,8 +9,8 @@
 
 <body>
     <center>
-        <a href="src/menus/main.php"><img src="assets/images/ditte/italia.jpg" height="50" /></a>&nbsp;
-        <h2>Selezionare nazione</h2>
+        <a href="src/menus/main.php"><img src="assets/images/logo.jpg"/></a>&nbsp;
+        <h2>k-Mag</h2>
     </center>
     <div class="footmsg">
         <center>

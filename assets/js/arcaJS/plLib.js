@@ -629,7 +629,7 @@ function decodeBanc(obj) {
         var pesoThisCollo = $("#pesocollo").val();
         var pesoNetBanc = oArt.xml.getElementsByTagName("pesounit")[0].firstChild
             .nodeValue;
-        var peso = pesoColli + pesoThisCollo + pesoNetBanc;
+        var peso = (pesoColli*1) + (pesoThisCollo*1) + (pesoNetBanc*1);
         $("#pesobanc").val(peso);
     } else {
         if (codImb == "#KZ-SCG(009)") {
@@ -642,7 +642,7 @@ function decodeBanc(obj) {
             var pesoThisCollo = $("#pesocollo").val();
             var pesoNetBanc = oArt.xml.getElementsByTagName("pesounit")[0].firstChild
                 .nodeValue;
-            var peso = pesoColli + pesoThisCollo + pesoNetBanc;
+            var peso = pesoColli * 1 + pesoThisCollo * 1 + pesoNetBanc * 1;
             $("#pesobanc").val(peso);
         }
     }
@@ -658,7 +658,7 @@ function chkPesoBanc(obj) {
     var pesoThisCollo = $("#pesocollo").val();
     var pesoNetBanc = oArt.xml.getElementsByTagName("pesounit")[0].firstChild
         .nodeValue;
-    var peso = pesoColli + pesoThisCollo + pesoNetBanc;
+    var peso = pesoColli * 1 + pesoThisCollo * 1 + pesoNetBanc * 1;
     if (obj.value < peso) {
         alert("Attenzione:\nPeso inferiore al peso netto");
     }
@@ -793,7 +793,7 @@ function getPesoCollo(idTespl, idRowPl, nCollo) {
 function getPesoBanc(idTespl, idRowPl, nBanc, mode) {
     var url =
         window.basePATH +
-        "plPesoColloGet.php?idTesPl=" +
+        "plPesoBancGet.php?idTesPl=" +
         idTespl +
         "&idRowPl=" +
         idRowPl +

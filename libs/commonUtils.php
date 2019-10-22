@@ -82,7 +82,7 @@ function hiddenField($id, $val) {
 //popUp Errori, Warning o Msg generici
 function popupMsg($msg, $type){
 	if($type == "E"){
-		echo "<script type='text/javascript'>alert('FATAL ERROR: $msg  Contattare Amministratore! $prevPage');  history.go(-1);</script>";
+		echo "<script type='text/javascript'>alert('FATAL ERROR: $msg  Contattare Amministratore!');  history.go(-1);</script>";
 	} else {
 		echo "<script type='text/javascript'>alert('WARNING $msg ');</script>";
 	}

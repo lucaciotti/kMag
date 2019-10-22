@@ -30,7 +30,7 @@
     <form name="plimb" method="get" action="05_wrtImb.php" onsubmit="return checkImbForm();">
 
         <label for="art">Imballo</label>
-        <input type="text" id="art" name="art" onblur="decodeImb(this);">
+        <input type="text" id="art" name="art" onchange="decodeImb(this);">
         <br/>
 
         <fieldset>
@@ -45,7 +45,7 @@
                 onblur="copiaVal(this, document.getElementById('altezza'));">
              in cm
             <br/>
-            (Largh. x Profondità x (H)Altezza)
+            (Largh. x Profondita' x (H)Altezza)
         </fieldset>
 
         <div id="divpesocollo">
@@ -75,7 +75,7 @@
                         onblur="copiaVal(this, document.getElementById('altezza'));">
                     in cm
                     <br/>
-                    (Largh. x Profondità x (H)Altezza)
+                    (Largh. x Profondita' x (H)Altezza)
                 </fieldset>
 
                 <div id="divpesocollo2">
@@ -94,9 +94,10 @@
                 <option value="<?php print $rep['codice'] ?>" <?php ($reparto==$rep['codice'] ? print "selected=selected" : "") ?>><?php print $rep['descrizion'] ?></option>
             <?php } ?>
         </select>
-
-        <input type="checkbox" id="hasbanc" name="hasbanc" value="hasbanc" onclick="clickBancale();">
-        <label for="hasbanc" class="checkbox">Bancalato</label>
+        <div>
+            <input type="checkbox" id="hasbanc" name="hasbanc" value="hasbanc" onclick="clickBancale();">
+            <label for="hasbanc" class="checkbox">Bancalato</label>
+        </div>
         
         <div id="askbanc" style="background: #c0e0ff; display: none;">
             <label for="bancnum">Bancale</label>
@@ -109,7 +110,7 @@
                 <select style="width: 280px; font-size: 78%" id="codbanc" name="codbanc" onchange="decodeBanc(this);">
                     <option value="NONE"> - Scegli bancale - </option>
                     <?php foreach($listPallets['data'] as $pallet){ ?>
-                        <option value="<?php print $pallet['codice'] ?>"><?php print $pallet['descrizion'] ?></option>
+                        <option value="<?php print trim($pallet['codice']) ?>"><?php print trim($pallet['codice'])." - ".$pallet['descrizion'] ?></option>
                     <?php } ?>
                 </select>
 
@@ -122,7 +123,7 @@
                     <input style="width: 40px" type="text" size="4" name="altezza" id="altezza">
                     in cm
                     <br/>
-                    (Largh. x Profondità x (H)Altezza)
+                    (Largh. x Profondita' x (H)Altezza)
                 </fieldset>
 
                 <fieldset>

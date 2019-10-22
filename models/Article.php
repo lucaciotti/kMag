@@ -75,7 +75,7 @@ class Article {
         return self::$conn->get($url, $queryUrl);
     }
 
-    public static function getImballi($codeArt, $columns=null){
+    public static function getImballi($codeArt = null, $columns=null){
         self::initialize();
 
         $url = 'artImballi/';
@@ -86,7 +86,7 @@ class Article {
         return self::$conn->get($url, $queryUrl);
     }
 
-    public static function getPallets($codeArt, $columns=null){
+    public static function getPallets($codeArt = null, $columns=null){
         self::initialize();
 
         $url = 'artPallet/';
@@ -97,7 +97,7 @@ class Article {
         return self::$conn->get($url, $queryUrl);
     }
 
-    public static function getAllUbic($codeArt, $columns=null){
+    public static function getAllUbic($codeArt = null, $columns=null){
         self::initialize();
 
         $url = 'artubicaz/';

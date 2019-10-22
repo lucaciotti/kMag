@@ -18,7 +18,7 @@
     $prtlist = CONFIG::$PRINTERS;
 
     $anno = current_year();
-    $pesocollo = 0;
+    // $pesocollo = 0;
     $pesocollo = PLUtils::getPesoNettoCollo($idTesPl, $idRowPL, $collo);
 ?>
 
@@ -44,7 +44,7 @@
 		<span>Peso collo di $pesocollo KG</span>
         </br>
 	<?php } else { ?>
-		<span>Peso dell'intera PL fino ad ora di $pesocollo KG</span>
+		<span>Peso dell'intera PL fino ad ora di <?php print $pesocollo ?> KG</span>
         </br>
 	<?php } ?>
 
